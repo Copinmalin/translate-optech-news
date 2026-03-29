@@ -1,7 +1,7 @@
-name: Run Optech Translation
+name: Run Optech Translation (global FR link resolver v3)
 
 run-name: >-
-  Optech | ${{ inputs.target }} | ${{ inputs.min_date }}
+  Optech linkresolver3 | ${{ inputs.target }} | ${{ inputs.min_date }}
 
 on:
   workflow_dispatch:
@@ -71,12 +71,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run translation
+      - name: Run translation with global FR link resolver v3
         shell: bash
         run: |
           set -euo pipefail
 
-          CMD=(python optech_fr.py "${{ inputs.target }}" \
+          CMD=(python optech_fr_linkresolver3.py "${{ inputs.target }}" \
             --min-date "${{ inputs.min_date }}" \
             --pause "${{ inputs.pause }}" \
             --model "${{ inputs.model }}" \
@@ -97,7 +97,7 @@ jobs:
           printf 'Running command:\n%s\n' "${CMD[*]}"
           "${CMD[@]}"
 
-      - name: Show batch report when present
+      - name: Show reports when present
         if: always()
         shell: bash
         run: |
@@ -105,12 +105,16 @@ jobs:
             echo "--- batch-report.json ---"
             cat "${{ inputs.output_dir }}/batch-report.json"
           fi
+          if [ -f "${{ inputs.output_dir }}/link-resolution-report.json" ]; then
+            echo "--- link-resolution-report.json ---"
+            cat "${{ inputs.output_dir }}/link-resolution-report.json"
+          fi
 
       - name: Upload generated files
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: optech-output-${{ github.run_number }}
+          name: optech-output-linkresolver3-${{ github.run_number }}
           path: |
             ${{ inputs.output_dir }}
           if-no-files-found: warn
