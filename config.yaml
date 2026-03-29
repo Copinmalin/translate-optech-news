@@ -1,8 +1,0 @@
-min_date: "2022-07-01"
-output_dir: "data/translated"
-raw_dir: "data/raw"
-manifest_path: "data/manifests/batch-report.json"
-pause_seconds: 0.5
-use_native_fr_first: true
-overwrite: false
-oldest_first: true
