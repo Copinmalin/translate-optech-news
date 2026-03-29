@@ -1,7 +1,7 @@
-name: Run Optech Translation
+name: Run Optech Translation (Markdown source v7)
 
 run-name: >-
-  Optech | ${{ inputs.target }} | ${{ inputs.min_date }}
+  Optech MD v7 | ${{ inputs.target }} | ${{ inputs.min_date }}
 
 on:
   workflow_dispatch:
@@ -31,11 +31,6 @@ on:
         required: true
         default: true
         type: boolean
-      force_gpt:
-        description: "Force GPT even if a native FR version exists"
-        required: true
-        default: false
-        type: boolean
       overwrite:
         description: "Overwrite existing generated files"
         required: true
@@ -64,10 +59,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -76,12 +71,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run translation
+      - name: Run translation from upstream Markdown with v7 wrapped preferences
         shell: bash
         run: |
           set -euo pipefail
 
-          CMD=(python optech_fr.py "${{ inputs.target }}" \
+          CMD=(python optech_fr_v7.py "${{ inputs.target }}" \
             --min-date "${{ inputs.min_date }}" \
             --pause "${{ inputs.pause }}" \
             --model "${{ inputs.model }}" \
@@ -95,10 +90,6 @@ jobs:
             CMD+=(--oldest-first)
           fi
 
-          if [ "${{ inputs.force_gpt }}" = "true" ]; then
-            CMD+=(--force-gpt)
-          fi
-
           if [ "${{ inputs.overwrite }}" = "true" ]; then
             CMD+=(--overwrite)
           fi
@@ -106,11 +97,20 @@ jobs:
           printf 'Running command:\n%s\n' "${CMD[*]}"
           "${CMD[@]}"
 
+      - name: Show batch report when present
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "${{ inputs.output_dir }}/batch-report.json" ]; then
+            echo "--- batch-report.json ---"
+            cat "${{ inputs.output_dir }}/batch-report.json"
+          fi
+
       - name: Upload generated files
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
-          name: optech-output-${{ github.run_number }}
+          name: optech-output-markdown-v7-${{ github.run_number }}
           path: |
             ${{ inputs.output_dir }}
           if-no-files-found: warn
