@@ -14,12 +14,12 @@ on:
       min_date:
         description: "Minimum newsletter date (YYYY-MM-DD)"
         required: true
-        default: "2022-07-01"
+        default: "2018-06-07"
         type: string
       limit:
         description: "Maximum number of newsletters in batch mode (leave empty for all)"
         required: false
-        default: "3"
+        default: "5"
         type: string
       pause:
         description: "Pause between newsletters in batch mode"
@@ -34,7 +34,7 @@ on:
       overwrite:
         description: "Overwrite existing generated files"
         required: true
-        default: false
+        default: true
         type: boolean
       model:
         description: "OpenAI model"
