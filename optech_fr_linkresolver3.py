@@ -15,6 +15,22 @@ import optech_fr as base
 
 SITE_BASE = "https://bitcoinops.org"
 
+import re
+
+REFERENCE_DEF_RE = re.compile(r"^\[[^\]]+\]:\s+\S+")
+
+def sanitize_internal_path_segments(text: str) -> str:
+    replacements = {
+        "/en/le bulletin/": "/en/newsletters/",
+        "/en/les bulletins/": "/en/newsletters/",
+        "/fr/le bulletin/": "/fr/newsletters/",
+        "/fr/les bulletins/": "/fr/newsletters/",
+        "/en/newsletter/": "/en/newsletters/",
+        "/fr/newsletter/": "/fr/newsletters/",
+    }
+    for bad, good in replacements.items():
+        text = text.replace(bad, good)
+    return text
 
 def split_front_matter(markdown_text: str) -> tuple[str, str]:
     m = re.match(r"^(---\n.*?\n---\n)(.*)$", markdown_text, re.DOTALL)
@@ -243,16 +259,26 @@ def wrap_markdown_body(text: str, width: int) -> str:
     return "\n".join(out).strip() + "\n"
 
 
+_original_postprocess_output = postprocess_output
+
 def postprocess_output(path_str: str) -> None:
     path = Path(path_str)
     if not path.exists():
         return
-    preferences = base.load_preferences()
-    width = int(preferences.get("wrap_width", 140))
+
+    # 1) Nettoyage pré-résolution
     text = path.read_text(encoding="utf-8")
     front_matter, body = split_front_matter(text)
-    body = localize_internal_links(body)
-    body = wrap_markdown_body(body, width)
+    body = sanitize_internal_path_segments(body)
+    path.write_text(front_matter + body, encoding="utf-8")
+
+    # 2) Résolution FR existante
+    _original_postprocess_output(path_str)
+
+    # 3) Nettoyage post-résolution de sécurité
+    text = path.read_text(encoding="utf-8")
+    front_matter, body = split_front_matter(text)
+    body = sanitize_internal_path_segments(body)
     path.write_text(front_matter + body, encoding="utf-8")
 
     report_path = path.parent.parent.parent / "link-resolution-report.json"

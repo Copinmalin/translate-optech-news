@@ -4,6 +4,12 @@ preferred_terms:
   newsletter: le bulletin
   newsletters: les bulletins
   [Newsletter: le [Bulletin
+# IMPORTANT:
+# Ces remplacements sont réservés au texte visible.
+# Ils ne doivent jamais s'appliquer :
+# - aux URLs
+# - aux définitions de références Markdown
+# - aux ancres
 
 headings:
   News: "Nouvelles"

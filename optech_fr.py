@@ -23,7 +23,7 @@ RAW_BASE = "https://raw.githubusercontent.com/bitcoinops/bitcoinops.github.io/ma
 TIMEOUT = 30
 DEFAULT_MIN_DATE = date(2022, 7, 1)
 PREFERENCES_PATH = Path("preferences_fr.yaml")
-
+REFERENCE_DEF_RE = re.compile(r"^\[[^\]]+\]:\s+\S+")
 
 def fetch(url: str) -> requests.Response:
     headers = {"User-Agent": "optech-fr-md/final (+https://bitcoinops.org)"}
@@ -190,7 +190,30 @@ def normalize_headings(text: str, headings: dict) -> str:
     for en, fr in headings.items():
         text = re.sub(rf"^##\s+{re.escape(en)}\s*$", f"## {fr}", text, flags=re.MULTILINE)
     return text
+REFERENCE_DEF_RE = re.compile(r"^\[[^\]]+\]:\s+\S+")
 
+def apply_preferred_terms(text: str, preferred_terms: dict[str, str]) -> str:
+    lines = text.splitlines()
+    out = []
+
+    for line in lines:
+        # Ne jamais modifier les définitions de références Markdown
+        # ex: [news297 rpc]: /en/newsletters/2024/04/10/#bitcoin-core-29130
+        if REFERENCE_DEF_RE.match(line):
+            out.append(line)
+            continue
+
+        # Sécurité supplémentaire pour éviter toute altération d'URL brute
+        if "]: /en/" in line or "]: /fr/" in line:
+            out.append(line)
+            continue
+
+        updated = line
+        for src, dst in preferred_terms.items():
+            updated = re.sub(rf"\b{re.escape(src)}\b", dst, updated)
+        out.append(updated)
+
+    return "\n".join(out)
 
 def apply_preferred_replacements(text: str, preferences: dict) -> str:
     terms = preferences.get("preferred_terms", {})
