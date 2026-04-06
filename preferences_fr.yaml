@@ -4,8 +4,8 @@ preferred_terms:
   newsletter: le bulletin
   newsletters: les bulletins
   [Newsletter: le [Bulletin
-  /newsletters/: /newsletters/
-  /newsletter/: /newsletter/
+  /newsletters: /newsletters/
+  /newsletter: /newsletter/
 
 headings:
   News: "Nouvelles"
