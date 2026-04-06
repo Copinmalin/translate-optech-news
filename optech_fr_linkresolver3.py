@@ -18,6 +18,7 @@ SITE_BASE = "https://bitcoinops.org"
 import re
 
 REFERENCE_DEF_RE = re.compile(r"^\[[^\]]+\]:\s+\S+")
+REFERENCE_DEF_CAPTURE_RE = re.compile(r"^(\[[^\]]+\]:\s+)(\S+)(\s*)$")
 
 def sanitize_internal_path_segments(text: str) -> str:
     replacements = {
@@ -158,6 +159,33 @@ def localize_internal_links(markdown_text: str) -> str:
     return pattern.sub(lambda m: resolve_internal_url(m.group(0)), markdown_text)
 
 
+def resolve_reference_definition_links(text: str) -> str:
+    lines = text.splitlines()
+    out = []
+
+    for line in lines:
+        m = REFERENCE_DEF_CAPTURE_RE.match(line)
+        if not m:
+            out.append(line)
+            continue
+
+        prefix, url, suffix = m.groups()
+
+        # On ne touche qu'aux liens internes Optech en /en/
+        if not url.startswith("/en/"):
+            out.append(line)
+            continue
+
+        resolved = resolve_internal_url(url)
+
+        # Toujours vérifier l'existence/validité
+        if resolved and resolved.startswith("/fr/"):
+            out.append(f"{prefix}{resolved}{suffix}")
+        else:
+            out.append(line)
+
+    return "\n".join(out)
+
 def is_reference_definition(line: str) -> bool:
     return bool(re.match(r"^\[[^\]]+\]:\s", line))
 
@@ -283,7 +311,13 @@ def postprocess_output(path_str: str) -> None:
     # 1) Nettoyage pré-résolution
     text = path.read_text(encoding="utf-8")
     front_matter, body = split_front_matter(text)
+
+    # sécurité sur les segments de chemin
     body = sanitize_internal_path_segments(body)
+
+    # résolution explicite des définitions de références Markdown
+    body = resolve_reference_definition_links(body)
+
     path.write_text(front_matter + body, encoding="utf-8")
 
     # 2) Résolution FR existante
