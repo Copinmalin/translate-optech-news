@@ -258,6 +258,20 @@ def wrap_markdown_body(text: str, width: int) -> str:
     flush_plain()
     return "\n".join(out).strip() + "\n"
 
+def postprocess_output(path_str: str) -> None:
+    path = Path(path_str)
+    if not path.exists():
+        return
+    preferences = base.load_preferences()
+    width = int(preferences.get("wrap_width", 140))
+    text = path.read_text(encoding="utf-8")
+    front_matter, body = split_front_matter(text)
+    body = localize_internal_links(body)
+    body = wrap_markdown_body(body, width)
+    path.write_text(front_matter + body, encoding="utf-8")
+
+    report_path = path.parent.parent.parent / "link-resolution-report.json"
+    report_path.write_text(json.dumps(_resolution_log, ensure_ascii=False, indent=2), encoding="utf-8")
 
 _original_postprocess_output = postprocess_output
 
