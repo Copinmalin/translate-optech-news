@@ -38,4 +38,39 @@ preferred_phrases:
   stackexchange_intro: |
     *[Bitcoin Stack Exchange][bitcoin.se] est l'un des premiers endroits où les contributeurs d'Optech cherchent des réponses à leurs
     questions---ou quand nous avons quelques moments libres pour aider les utilisateurs curieux ou confus. Dans cette rubrique mensuelle,
-    nous mettons en lumière certaines des questions et réponses les mieux votées postées depuis notre dernière mise à jour.*
+    nous mettons en lumière certaines des questions et réponses les mieux votées postées depuis notre dernière mise à jour.* 
+
+markdown_reference_rules: |
+  Règles Markdown impératives :
+
+  - Si un lien abrégé de type [texte traduit][] apparaît dans le corps du document,
+    alors la définition de référence correspondante en bas du document doit reprendre
+    exactement ce même texte traduit entre crochets.
+
+  - Ne jamais laisser une définition de référence textuelle en anglais si le libellé
+    visible correspondant a été traduit en français.
+
+  - Exemple correct :
+    dans le corps :
+    [version majeure de Bitcoin Core][]
+    alors en bas :
+    [version majeure de Bitcoin Core]: https://bitcoincore.org/en/lifecycle/#versioning
+
+  - Exemple incorrect :
+    dans le corps :
+    [version majeure de Bitcoin Core][]
+    mais en bas :
+    [major bitcoin core release]: https://bitcoincore.org/en/lifecycle/#versioning
+
+  - Pour les renvois vers une newsletter, traduire aussi la phrase autour du lien
+    en français naturel.
+    Exemple :
+    “see [Newsletter #382][news382 bc33629]”
+    doit devenir :
+    “voir le [Bulletin #382][news382 bc33629]”
+    et non :
+    “voir [Bulletin #382][news382 bc33629]”
+
+  - Faire une passe finale de vérification entre les références utilisées dans le corps
+    et les définitions de références présentes en bas du document.
+
