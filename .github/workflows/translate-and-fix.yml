@@ -57,14 +57,14 @@ jobs:
       - name: Fix internal links
         run: |
            python tools/repair_fr_links.py \
-      --mode apply \
-      --target "${{ inputs.repair_target }}"
+            --mode apply \
+            --target "${{ inputs.repair_target }}"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: optech-translated-and-fixed
           path: |
-        ${{ inputs.output_dir }}
-    output/link-repair-report.json
-    output/link-repair-diff.patchepair-diff.patch
+           ${{ inputs.output_dir }}
+           output/link-repair-report.json
+           output/link-repair-diff.patchepair-diff.patch
