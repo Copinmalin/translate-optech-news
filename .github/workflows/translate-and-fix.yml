@@ -55,6 +55,8 @@ jobs:
             --overwrite
 
       - name: Fix internal links
+        env:
+          PYTHONPATH: .
         run: |
            python tools/repair_fr_links.py \
             --mode apply \
