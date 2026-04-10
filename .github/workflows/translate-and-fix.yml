@@ -56,17 +56,15 @@ jobs:
 
       - name: Fix internal links
         run: |
-          python scripts/resolve_optech_newsletter_links.py \
-            --bitcoinops-repo target_repo \
-            --lang fr \
-            --file "${{ inputs.repair_target }}" \
-            --write \
-            --report reports/fix-report.json
+           python tools/repair_fr_links.py \
+      --mode apply \
+      --target "${{ inputs.repair_target }}"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
           name: optech-translated-and-fixed
           path: |
-            ${{ inputs.output_dir }}
-            reports/fix-report.json
+        ${{ inputs.output_dir }}
+    output/link-repair-report.json
+    output/link-repair-diff.patchepair-diff.patch
