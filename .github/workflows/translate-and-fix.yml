@@ -8,10 +8,15 @@ on:
         default: "batch"
       min_date:
         description: "Date minimale (YYYY-MM-DD)"
-        default: "2018-06-07"
+        default: "2018-09-01"
       limit:
         description: "Nombre maximal de newsletters en mode batch"
         default: "5"
+      oldest_first:
+        description: "Traiter des plus anciennes aux plus récentes"
+        required: true
+        default: true
+        type: boolean
       output_dir:
         description: "Répertoire de sortie"
         default: "output"
@@ -48,11 +53,17 @@ jobs:
 
       - name: Run translation with linkresolver3
         run: |
-          python optech_fr_linkresolver3.py "${{ inputs.target }}" \
+          CMD=(python optech_fr_linkresolver3.py "${{ inputs.target }}" \
             --min-date "${{ inputs.min_date }}" \
             --limit "${{ inputs.limit }}" \
             --output-dir "${{ inputs.output_dir }}" \
-            --overwrite
+            --overwrite)
+
+          if [ "${{ inputs.oldest_first }}" = "true" ]; then
+            CMD+=(--oldest-first)
+          fi
+
+          "${CMD[@]}"
 
       - name: Fix internal links
         env:
