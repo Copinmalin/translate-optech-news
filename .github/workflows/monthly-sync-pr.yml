@@ -37,6 +37,7 @@ jobs:
           repository: Copinmalin/bitcoinops.github.io
           ref: master
           path: target_repo
+
           token: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
           fetch-depth: 0
 
@@ -59,6 +60,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
+
         run: |
           CMD=(python scripts/sync_monthly_translation_pr.py \
             --bitcoinops-repo target_repo \
@@ -92,7 +94,9 @@ jobs:
       - name: Create pull request
         if: ${{ inputs.create_pr && steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' }}
         env:
+
           GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
+
         run: |
           gh pr create \
             --repo Copinmalin/bitcoinops.github.io \
