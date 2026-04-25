@@ -55,17 +55,6 @@ jobs:
           git -C target_repo config user.name "github-actions[bot]"
           git -C target_repo config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Detect write token availability
-        id: auth
-        env:
-          BITCOINOPS_REPO_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
-        run: |
-          if [ -n "$BITCOINOPS_REPO_TOKEN" ]; then
-            echo "has_write_token=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_write_token=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Run monthly sync workflow script
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -96,12 +85,12 @@ jobs:
           echo "title=${TITLE}" >> "$GITHUB_OUTPUT"
 
       - name: Push branch
-        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.auth.outputs.has_write_token == 'true' }}
+        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && secrets.BITCOINOPS_REPO_TOKEN != '' }}
         run: |
           git -C target_repo push --set-upstream origin "${{ steps.capture.outputs.branch }}"
 
       - name: Create pull request
-        if: ${{ inputs.create_pr && steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.auth.outputs.has_write_token == 'true' }}
+        if: ${{ inputs.create_pr && steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && secrets.BITCOINOPS_REPO_TOKEN != '' }}
         env:
           GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
         run: |
@@ -113,6 +102,6 @@ jobs:
             --body "Monthly French newsletter translation batch."
 
       - name: Explain skipped push/PR without write token
-        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.auth.outputs.has_write_token == 'false' }}
+        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && secrets.BITCOINOPS_REPO_TOKEN == '' }}
         run: |
           echo "::warning::BITCOINOPS_REPO_TOKEN est absent. La branche locale a bien été créée et commitée dans le job, mais le push/PR est ignoré pour éviter une erreur 403."
