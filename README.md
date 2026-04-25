@@ -37,11 +37,4 @@ python scripts/sync_monthly_translation_pr.py \
 - Le script utilise `optech_fr.py` pour la traduction (requiert `OPENAI_API_KEY`).
 - `--min-date` permet de limiter la période analysée.
 - `--work-dir` permet d'isoler les fichiers générés pendant le workflow.
-
-
-## GitHub Action
-Un workflow GitHub Actions est disponible dans `.github/workflows/monthly-sync-pr.yml` pour lancer ce script depuis l'interface Actions.
-
-Secrets requis :
-- `OPENAI_API_KEY` : clé OpenAI pour la traduction.
-- `BITCOINOPS_REPO_TOKEN` : token GitHub avec droits d'écriture sur `Copinmalin/bitcoinops.github.io`.
+- >>>>>>> main
