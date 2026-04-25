@@ -44,5 +44,5 @@ Un workflow GitHub Actions est disponible dans `.github/workflows/monthly-sync-p
 
 Secrets requis :
 - `OPENAI_API_KEY` : clé OpenAI pour la traduction.
-- `BITCOINOPS_REPO_TOKEN` : token GitHub recommandé (et nécessaire pour push/PR cross-repo) avec droits d'écriture sur `Copinmalin/bitcoinops.github.io`.  
-  Le workflow utilise automatiquement `github.token` en fallback si ce secret n'est pas défini.
+- `BITCOINOPS_REPO_TOKEN` : token GitHub **nécessaire** pour push/PR cross-repo avec droits d'écriture sur `Copinmalin/bitcoinops.github.io`.  
+  Sans ce secret, le workflow exécute la traduction/commit localement dans le job puis **ignore** le push/PR (warning explicite) pour éviter l'erreur 403.
