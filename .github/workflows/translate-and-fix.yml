@@ -80,4 +80,4 @@ jobs:
           path: |
            ${{ inputs.output_dir }}
            output/link-repair-report.json
-           output/link-repair-diff.patchepair-diff.patch
+           output/link-repair-diff.patch

@@ -17,8 +17,10 @@ SITE_BASE = "https://bitcoinops.org"
 
 import re
 
-REFERENCE_DEF_RE = re.compile(r"^\[[^\]]+\]:\s+\S+")
-REFERENCE_DEF_CAPTURE_RE = re.compile(r"^(\[[^\]]+\]:\s+)(\S+)(\s*)$")
+REFERENCE_DEF_RE = re.compile(r"^\[[^\]]+\]:\s+")
+REFERENCE_DEF_CAPTURE_RE = re.compile(
+    r"^(\[[^\]]+\]:\s+)(<[^>]+>|\S+?)(\s+(?:\"[^\"]*\"|'[^']*'|\([^)]+\)))?(\s*)$"
+)
 
 def sanitize_internal_path_segments(text: str) -> str:
     replacements = {
@@ -86,10 +88,6 @@ def candidate_paths(path_no_anchor: str, target_lang: str) -> list[str]:
         base_path = path_no_anchor
 
     candidates = [base_path]
-    if "/newsletters/" in base_path:
-        candidates.append(base_path.replace("/newsletters/", "/bulletins/", 1))
-    if "/bulletins/" in base_path:
-        candidates.append(base_path.replace("/bulletins/", "/newsletters/", 1))
 
     final = []
     seen = set()
@@ -150,8 +148,8 @@ def resolve_internal_url(en_relative_url: str) -> str:
             _resolution_log[en_relative_url] = {"status": "resolved", "resolved_to": resolved, "mode": "dom_index"}
             return resolved
 
-    _resolution_log[en_relative_url] = {"status": "resolved_base_only", "resolved_to": chosen_fr_path, "reason": "anchor_unresolved"}
-    return chosen_fr_path
+    _resolution_log[en_relative_url] = {"status": "kept_en", "reason": "anchor_unresolved", "normalized_fr": chosen_fr_path}
+    return en_relative_url
 
 
 def localize_internal_links(markdown_text: str) -> str:
@@ -169,18 +167,20 @@ def resolve_reference_definition_links(text: str) -> str:
             out.append(line)
             continue
 
-        prefix, url, suffix = m.groups()
+        prefix, url, title_part, suffix = m.groups()
+        unwrapped_url = url[1:-1] if url.startswith("<") and url.endswith(">") else url
 
         # On ne touche qu'aux liens internes Optech en /en/
-        if not url.startswith("/en/"):
+        if not unwrapped_url.startswith("/en/"):
             out.append(line)
             continue
 
-        resolved = resolve_internal_url(url)
+        resolved = resolve_internal_url(unwrapped_url)
 
         # Toujours vérifier l'existence/validité
         if resolved and resolved.startswith("/fr/"):
-            out.append(f"{prefix}{resolved}{suffix}")
+            rendered_url = f"<{resolved}>" if url.startswith("<") and url.endswith(">") else resolved
+            out.append(f"{prefix}{rendered_url}{title_part or ''}{suffix}")
         else:
             out.append(line)
 
