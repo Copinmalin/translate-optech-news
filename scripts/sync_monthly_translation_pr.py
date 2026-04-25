@@ -10,7 +10,7 @@ import subprocess
 import sys
 from collections import defaultdict
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import date
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -96,8 +96,7 @@ def copy_into_bitcoinops(bitcoinops_repo: Path, translated_files: list[Path]) ->
 
 def commit_for_month(bitcoinops_repo: Path, month: str, copied_files: list[Path], branch_prefix: str) -> tuple[str, str]:
     title = f"Newsletter {month.replace('-', '.')} translate in French"
-    unique_suffix = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
-    branch = f"{branch_prefix}{month}-{unique_suffix}"
+    branch = f"{branch_prefix}{month}"
 
     run_git(bitcoinops_repo, "checkout", "-b", branch)
     run_git(bitcoinops_repo, "add", *[str(path.relative_to(bitcoinops_repo)) for path in copied_files])

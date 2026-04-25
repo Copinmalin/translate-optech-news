@@ -37,7 +37,6 @@ python scripts/sync_monthly_translation_pr.py \
 - Le script utilise `optech_fr.py` pour la traduction (requiert `OPENAI_API_KEY`).
 - `--min-date` permet de limiter la période analysée.
 - `--work-dir` permet d'isoler les fichiers générés pendant le workflow.
-- La branche créée inclut un suffixe horodaté (UTC) pour éviter les conflits de push lors de relances (`fr-newsletter-YYYY-MM-YYYYMMDD-HHMMSS`).
 
 
 ## GitHub Action
