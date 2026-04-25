@@ -215,11 +215,21 @@ def apply_preferred_terms(text: str, preferred_terms: dict[str, str]) -> str:
 
     return "\n".join(out)
 
+
+def normalize_newsletter_reference_labels(text: str) -> str:
+    """Force le libellé FR avec article pour les liens de type [Newsletter #xx][ref]."""
+    return re.sub(
+        r"\[Newsletter\s+#(\d+)\]\[([^\]]+)\]",
+        r"le [Bulletin #\1][\2]",
+        text,
+    )
+
 def apply_preferred_replacements(text: str, preferences: dict) -> str:
     terms = preferences.get("preferred_terms", {})
     for src, dst in sorted(terms.items(), key=lambda item: len(item[0]), reverse=True):
         text = re.sub(rf"\b{re.escape(src)}\b", dst, text, flags=re.IGNORECASE)
     text = normalize_headings(text, preferences.get("headings", {}))
+    text = normalize_newsletter_reference_labels(text)
     return text
 
 
