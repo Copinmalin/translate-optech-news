@@ -1,0 +1,123 @@
+name: Monthly FR translation sync PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      min_date:
+        description: "Date minimale à considérer (YYYY-MM-DD)"
+        required: false
+        default: "2022-07-01"
+      month:
+        description: "Mois forcé (YYYY-MM). Laisser vide pour sélection auto du plus ancien mois incomplet"
+        required: false
+        default: ""
+      model:
+        description: "Modèle OpenAI"
+        required: false
+        default: "gpt-5.4"
+      create_pr:
+        description: "Créer automatiquement la PR après commit"
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  monthly-sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout tooling repo
+        uses: actions/checkout@v6
+
+      - name: Checkout bitcoinops.github.io
+        uses: actions/checkout@v6
+        with:
+          repository: Copinmalin/bitcoinops.github.io
+          ref: master
+          path: target_repo
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Configure git identity
+        run: |
+          git -C target_repo config user.name "github-actions[bot]"
+          git -C target_repo config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Detect write token availability
+        id: auth
+        env:
+          BITCOINOPS_REPO_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+        run: |
+          if [ -n "$BITCOINOPS_REPO_TOKEN" ]; then
+            echo "has_write_token=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_write_token=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure authenticated remote for push
+        if: ${{ steps.auth.outputs.has_write_token == 'true' }}
+        env:
+          BITCOINOPS_REPO_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+        run: |
+          git -C target_repo remote set-url origin "https://x-access-token:${BITCOINOPS_REPO_TOKEN}@github.com/Copinmalin/bitcoinops.github.io.git"
+
+      - name: Run monthly sync workflow script
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          CMD=(python scripts/sync_monthly_translation_pr.py \
+            --bitcoinops-repo target_repo \
+            --work-dir output/monthly-workflow \
+            --min-date "${{ inputs.min_date }}" \
+            --model "${{ inputs.model }}")
+
+          if [ -n "${{ inputs.month }}" ]; then
+            CMD+=(--month "${{ inputs.month }}")
+          fi
+
+          if [ "${{ inputs.create_pr }}" = "true" ]; then
+            CMD+=(--print-gh-pr)
+          fi
+
+          "${CMD[@]}"
+
+      - name: Capture branch and title
+        id: capture
+        run: |
+          BRANCH=$(git -C target_repo branch --show-current)
+          TITLE=$(git -C target_repo log -1 --pretty=%s)
+          echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
+          echo "title=${TITLE}" >> "$GITHUB_OUTPUT"
+
+      - name: Push branch
+        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.auth.outputs.has_write_token == 'true' }}
+        run: |
+          git -C target_repo push --set-upstream origin "${{ steps.capture.outputs.branch }}"
+
+      - name: Create pull request
+        if: ${{ inputs.create_pr && steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.auth.outputs.has_write_token == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+        run: |
+          gh pr create \
+            --repo Copinmalin/bitcoinops.github.io \
+            --head "${{ steps.capture.outputs.branch }}" \
+            --base master \
+            --title "${{ steps.capture.outputs.title }}" \
+            --body "Monthly French newsletter translation batch."
+
+      - name: Explain skipped push/PR without write token
+        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.auth.outputs.has_write_token == 'false' }}
+        run: |
+          echo "::warning::BITCOINOPS_REPO_TOKEN est absent. La branche locale a bien été créée et commitée dans le job, mais le push/PR est ignoré pour éviter une erreur 403."
