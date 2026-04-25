@@ -76,10 +76,6 @@ def candidate_paths(path_no_anchor: str, target_lang: str) -> list[str]:
         base_path = path_no_anchor
 
     candidates = [base_path]
-    if "/newsletters/" in base_path:
-        candidates.append(base_path.replace("/newsletters/", "/bulletins/", 1))
-    if "/bulletins/" in base_path:
-        candidates.append(base_path.replace("/bulletins/", "/newsletters/", 1))
 
     final = []
     seen = set()
@@ -135,7 +131,11 @@ def resolve_internal_url(en_relative_url: str) -> tuple[str, dict]:
             resolved = f"{chosen_fr_path}#{fr_ids[idx]}"
             return resolved, {"status": "resolved", "mode": "dom_index", "resolved_to": resolved}
 
-    return chosen_fr_path, {"status": "resolved_base_only", "reason": "anchor_unresolved", "resolved_to": chosen_fr_path}
+    return en_relative_url, {
+        "status": "kept_en",
+        "reason": "anchor_unresolved",
+        "normalized_fr": chosen_fr_path,
+    }
 
 
 def localize_internal_links(markdown_text: str) -> tuple[str, list[dict]]:
