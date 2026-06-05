@@ -84,13 +84,24 @@ jobs:
           echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
           echo "title=${TITLE}" >> "$GITHUB_OUTPUT"
 
+      - name: Detect bitcoinops write token
+        id: bitcoinops_token
+        env:
+          BITCOINOPS_REPO_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+        run: |
+          if [ -n "$BITCOINOPS_REPO_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Push branch
-        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && secrets.BITCOINOPS_REPO_TOKEN != '' }}
+        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.bitcoinops_token.outputs.available == 'true' }}
         run: |
           git -C target_repo push --set-upstream origin "${{ steps.capture.outputs.branch }}"
 
       - name: Create pull request
-        if: ${{ inputs.create_pr && steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && secrets.BITCOINOPS_REPO_TOKEN != '' }}
+        if: ${{ inputs.create_pr && steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.bitcoinops_token.outputs.available == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
         run: |
@@ -102,6 +113,6 @@ jobs:
             --body "Monthly French newsletter translation batch."
 
       - name: Explain skipped push/PR without write token
-        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && secrets.BITCOINOPS_REPO_TOKEN == '' }}
+        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.bitcoinops_token.outputs.available == 'false' }}
         run: |
           echo "::warning::BITCOINOPS_REPO_TOKEN est absent. La branche locale a bien été créée et commitée dans le job, mais le push/PR est ignoré pour éviter une erreur 403."
