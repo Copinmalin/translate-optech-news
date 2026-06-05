@@ -150,13 +150,15 @@ def create_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def pick_month(plan_list: list[MonthPlan], forced_month: str | None) -> MonthPlan:
+def pick_month(plan_list: list[MonthPlan], forced_month: str | None) -> MonthPlan | None:
     if forced_month is None:
         return plan_list[0]
     for plan in plan_list:
         if plan.month == forced_month:
             return plan
-    raise RuntimeError(f"Le mois forcé {forced_month} n'a aucune traduction manquante dans la plage sélectionnée.")
+    print(f"[INFO] Le mois forcé {forced_month} n'a aucune traduction manquante dans la plage sélectionnée.")
+    print("[INFO] Aucune branche ni PR ne sera créée pour ce run.")
+    return None
 
 
 def main() -> None:
@@ -173,6 +175,9 @@ def main() -> None:
         return
 
     month_plan = pick_month(month_plans, args.month)
+    if month_plan is None:
+        return
+
     print(f"[SELECTED] {month_plan.month} ({len(month_plan.missing_urls)} newsletter(s) manquante(s))")
 
     work_dir = Path(args.work_dir).resolve()
