@@ -1,6 +1,26 @@
 # translate-optech-news
 Automate translation for Bitcoinops newsletter.
 
+## Traduction hebdomadaire avec relecture
+
+Le workflow `.github/workflows/weekly-latest-newsletter.yml` se lance chaque vendredi a 18:15 UTC, donc apres 18 h en France en heure d'hiver comme en heure d'ete. Il peut aussi etre lance manuellement.
+
+Le workflow :
+
+1. detecte la derniere newsletter publiee ;
+2. ne fait rien si sa traduction est deja presente sur `Copinmalin/bitcoinops.github.io:master` ;
+3. traduit la newsletter et repare ses liens internes ;
+4. ouvre une PR brouillon dans ce depot et demande une relecture a `Copinmalin` ;
+5. apres passage en **Ready for review** et review **Approve**, cree la branche `Newsletter-N-translate-in-French` dans le fork puis la PR vers `bitcoinops/bitcoinops.github.io:master` ;
+6. ferme la PR de relecture sans la fusionner dans le depot d'outillage.
+
+Secrets requis :
+
+- `OPENAI_API_KEY` pour la traduction ;
+- `BITCOINOPS_REPO_TOKEN`, un token donnant l'ecriture sur `Copinmalin/bitcoinops.github.io` et permettant de creer une PR vers le depot public amont.
+
+Le token inter-depots n'est utilise qu'apres l'approbation humaine. Si le secret est absent, la preparation et la notification de relecture fonctionnent, mais la publication amont s'arrete avec un message explicite.
+
 ## Workflow mensuel automatique vers `bitcoinops.github.io`
 Oui, c'est possible de tout chaîner automatiquement :
 1. Sélectionner le plus ancien mois qui n'est pas encore complètement traduit.
