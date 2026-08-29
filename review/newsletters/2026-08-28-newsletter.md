@@ -77,11 +77,11 @@ les nouvelles versions ou d'aider à tester les versions candidates._
   effectuer la mise à niveau, surtout si leurs serveurs sont partagés entre plusieurs utilisateurs.
 
 - [Eclair 0.14.2][] est une version de sécurité pour cette implémentation de nœud LN. Elle corrige des bogues d'échec de paiement et de
-  gestion de canaux (voir [Bulletin
-  #418][news418 eclair fixes]), des vérifications manquantes de réserve de canal (voir [Bulletin
+  gestion de canaux (voir le [Bulletin
+  #418][news418 eclair fixes]), des vérifications manquantes de réserve de canal (voir le [Bulletin
   #419][news419 eclair reserves]), et des problèmes de financement
-  [à la volée][topic jit channels] (voir [Bulletin #419][news419 eclair funding]). Elle limite également les ressources consommées par les
-  [requêtes de gossip][topic channel announcements] (voir [Bulletin #419][news419 eclair gossip]) et les connexions entrantes en attente, et
+  [à la volée][topic jit channels] (voir le [Bulletin #419][news419 eclair funding]). Elle limite également les ressources consommées par les
+  [requêtes de gossip][topic channel announcements] (voir le [Bulletin #419][news419 eclair gossip]) et les connexions entrantes en attente, et
   inclut des modifications de configuration des [messages onion][topic onion messages] et de Tor. La mise à niveau est fortement recommandée
   car des nœuds malveillants pourraient exploiter certains des bogues corrigés. Les opérateurs devraient exécuter `bitcoind` sur la même
   machine qu'Eclair ou se connecter via un tunnel chiffré et authentifié, et consulter les [notes de version][eclair 0.14.2 notes] pour les
@@ -103,7 +103,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   `fee_rate_estimator` peut être utilisée pour obtenir des estimations basées sur une seule des approches.
 
 - [Bitcoin Core #35730][] ajoute une option de configuration `-rpcmaxconnections` (par défaut 16), qui limite le nombre de clients pouvant
-  se connecter simultanément à son serveur HTTP (voir [Bulletin #411][news411 http]). Une fois la limite atteinte, les connexions
+  se connecter simultanément à son serveur HTTP (voir le [Bulletin #411][news411 http]). Une fois la limite atteinte, les connexions
   supplémentaires restent dans la file d'attente des sockets du système d'exploitation sans consommer de mémoire applicative jusqu'à ce
   qu'un emplacement devienne disponible. Bitcoin Core peut désormais limiter et suivre l'utilisation des descripteurs de fichiers de ces
   connexions, résolvant un problème de longue date dans lequel une utilisation intensive de RPC pouvait épuiser les descripteurs de fichiers
@@ -112,7 +112,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   par itération.
 
 - [Bitcoin Core #35580][] corrige un bogue de construction de modèle de bloc qui comparait le poids ajusté selon les sigops d'un chunk de
-  transaction (voir [Bulletin
+  transaction (voir le [Bulletin
   #416][news416 sigops]), plutôt que son poids réel [BIP141][], au
   poids maximal du bloc. Le poids ajusté selon les sigops classe les chunks selon leur taux de frais effectif, tandis que la validité du
   bloc contraint séparément le poids réel et le coût en sigops. Par conséquent, le comportement précédent pouvait exclure à tort un chunk
@@ -123,7 +123,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   xpub globaux. Auparavant, Bitcoin Core regroupait les enregistrements par origine de clé (empreinte et chemin de dérivation), même si la
   sérialisation PSBT les identifie par xpub. Il en résultait que le même xpub avec des origines conflictuelles était sérialisé sous forme de
   clés dupliquées, créant un PSBT invalide que le RPC `decodepsbt` rejette. La deuxième PR corrige le décalage analogue pour les
-  enregistrements [tapscript][topic tapscript], qui sont regroupés en interne par script feuille mais sérialisés par bloc de contrôle.
+  enregistrements [tapscript][topic tapscript], qui sont regroupés en interne par script en feuille mais sérialisés par bloc de contrôle.
   Auparavant, la fusion pouvait créer des clés dupliquées lorsqu'un bloc de contrôle était associé à différents scripts, ou elle pouvait
   écarter des blocs de contrôle valides pour le même script. La troisième PR résout le problème du RPC `joinpsbts` qui supprimait les
   enregistrements xpub globaux et les métadonnées en mélangeant le PSBT fusionné sur place plutôt qu'en construisant un PSBT mélangé
@@ -140,14 +140,14 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   participant MuSig2 réutilisé soit préfixée deux fois aux métadonnées de dérivation [taproot][topic taproot] stockées dans un PSBT.
 
 - [Core Lightning #9374][] corrige une erreur d'état de canal qui pouvait survenir lorsqu'une tentative antérieure de [RBF][topic rbf] pour
-  un canal [financé par les deux parties][topic dual funding] se confirmait à la place de la tentative la plus récente (voir [Bulletin
+  un canal [financé par les deux parties][topic dual funding] se confirmait à la place de la tentative la plus récente (voir le [Bulletin
   #418][news418 eclair] pour un bogue similaire sur Eclair). Auparavant, si le pair
   se reconnectait pendant que Core Lightning était encore en train de rattraper la blockchain, il pouvait supposer que la dernière tentative
   de RBF était celle qui s'était confirmée et verrouiller le canal sur une transaction de financement non confirmée. Désormais, Core
   Lightning enregistre la tentative de financement qui s'est effectivement confirmée dès que son bloc est traité et utilise cette tentative
   lors du rétablissement du canal.
 
-- [Eclair #3342][] implémente le bit de fonctionnalité `option_onion_messages_only_channels` spécifié dans [BOLTs #1343][] (voir [Bulletin
+- [Eclair #3342][] implémente le bit de fonctionnalité `option_onion_messages_only_channels` spécifié dans [BOLTs #1343][] (voir le [Bulletin
   #416][news416 onion]). Lorsqu'il est configuré pour relayer des [messages onion][topic onion messages] uniquement pour des pairs avec des
   canaux, Eclair annonce désormais ce bit de fonctionnalité. Lorsqu'il relaie pour tous les pairs, Eclair annonce le bit de fonctionnalité
   `option_onion_messages`.
@@ -155,10 +155,10 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
 - [Eclair #3321][] implémente le support du champ optionnel `fulfillment_payload` ajouté au message `update_fulfill_htlc` tel que spécifié
   par [BOLTs
   #1344][], étendant les [échecs attribuables][topic attributable failures] aux
-  paiements réussis (voir [Bulletin #416][news416 fulfillment]). Eclair peut relayer les charges utiles d'acquittement et les authentifier
+  paiements réussis (voir le [Bulletin #416][news416 fulfillment]). Eclair peut relayer les charges utiles d'acquittement et les authentifier
   comme faisant partie des données d'attribution, et peut les déchiffrer lorsqu'il est le payeur, mais n'en génère pas encore lorsqu'il est
   le destinataire du paiement. La PR signale une interopérabilité avec LDK, qui avait précédemment ajouté des données d'attribution au
-  chemin des paiements réussis (voir [Bulletin #364][news364 ldk attribution]).
+  chemin des paiements réussis (voir le [Bulletin #364][news364 ldk attribution]).
 
 - [LND #11008][] corrige un problème d'interblocage dans le flux d'ouverture de canal [PSBT][topic psbt] de LND. Auparavant, si la
   vérification du financement PSBT et le nettoyage d'une réservation de canal annulée s'exécutaient en même temps, chaque opération pouvait
@@ -169,7 +169,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
 - [HWI #841][] étend la commande `displayaddress` pour afficher sur un appareil matériel une adresse pour une politique de
   [descripteur][topic descriptors] de portefeuille [BIP388][] enregistrée, sélectionnée par index d'adresse et branche de réception ou de
   monnaie. La commande accepte les informations d'enregistrement renvoyées par la commande `registerdescriptor` et ajoute le support des
-  appareils BitBox02, Coldcard, Jade, et Ledger, en s'appuyant sur le support d'enregistrement de descripteurs décrit dans [Bulletin
+  appareils BitBox02, Coldcard, Jade, et Ledger, en s'appuyant sur le support d'enregistrement de descripteurs décrit dans le [Bulletin
   #419][news419 hwi].
 
 - [HWI #849][] met à jour le support de Coldcard pour afficher des adresses [taproot][topic taproot] à signature unique sur les appareils
