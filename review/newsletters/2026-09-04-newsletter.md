@@ -64,7 +64,7 @@ _Une nouvelle section mensuelle résumant les propositions et discussions sur la
   certaines entités pourraient reporter tout travail PQC jusqu'à pouvoir livrer P2TRv2 et CISA ensemble. Il préfère toujours P2TRv2 comme
   choix par défaut pour les utilisateurs occasionnels et [P2MR][news393 p2mr] pour les utilisateurs plus sophistiqués qui veulent masquer
   les points EC, et a noté qu'après le Q-day, les signatures basées sur des hachages auront probablement besoin d'une nouvelle règle de coût
-  de witness qui pèse davantage le CPU et moins la taille sérialisée (voir [Bulletin
+  de witness qui pèse davantage le CPU et moins la taille sérialisée (voir le [Bulletin
   #417][news417 pqwit]). Il a également averti que le fait d'avoir des nœuds de
   relais tiers agrégeant progressivement les signatures masquerait le vrai coût de bande passante dans la couche de consensus et pourrait
   renforcer les pools de minage existants en incitant à la soumission directe aux mineurs. Conduition a [répliqué][c delving pqout cisa]
@@ -75,7 +75,7 @@ _Une nouvelle section mensuelle résumant les propositions et discussions sur la
   dans P2TRv2 s'accorde mal avec l'objectif de P2TRv2 privilégiant d'abord l'adoption.
 
 - **Sauvetage PQC commit/reveal DropKick** : Conduition a [publié][c ml dropkick] sur la liste de diffusion Bitcoin-Dev une esquisse de
-  DropKick, un protocole de sauvetage [post-quantique][topic quantum resistance] commit/reveal (voir aussi [Bulletin #361][news361 pqcr] et
+  DropKick, un protocole de sauvetage [post-quantique][topic quantum resistance] commit/reveal (voir aussi le [Bulletin #361][news361 pqcr] et le
   [Bulletin #348][news348 utxo proving]) pour les utilisateurs n'ayant pas déplacé leurs pièces vers des sorties compatibles PQC avant le
   Q-day. Un utilisateur masque un engagement envers sa clé publique post-quantique et sa preuve de propriété (proof of knowledge asymmetry)
   quelque part dans un bloc (par exemple dans un `OP_RETURN` ou un tweak taproot). Les utilisateurs ne disposant pas de leur propre UTXO sûr
@@ -94,7 +94,7 @@ _Une nouvelle section mensuelle résumant les propositions et discussions sur la
 
 - **BIP préliminaire SHRINCS** : Conduition a [publié][c ml shrincs] sur la liste de diffusion Bitcoin-Dev, au nom du groupe de travail
   SHRINCS, un premier [brouillon][shrincs bip] spécifiant SHRINCS comme schéma de signature [basé sur des hachages][news386 jn hash]
-  semi-stateful pour Bitcoin (voir [Bulletin #391][news391 shrincs]). Les clés publiques font 48 octets. Les signatures stateful font 548
+  semi-stateful pour Bitcoin (voir le [Bulletin #391][news391 shrincs]). Les clés publiques font 48 octets. Les signatures stateful font 548
   octets au minimum ; un repli stateless intégré produit des signatures de 5 777 octets (le brouillon relève le budget stateless à 2^40
   signatures afin que des protocoles à haute fréquence tels que LN puissent utiliser ce repli). La vérification est de 4x à 16x plus rapide
   par octet que [BIP340][] [schnorr][topic schnorr signatures] avec accélération matérielle SHA256, ou dans le pire des cas 2 792
@@ -108,7 +108,7 @@ _Une nouvelle section mensuelle résumant les propositions et discussions sur la
   d'implémentation à ceux qui souhaitent intégrer SHRINCS.
 
 - **BIP448 et démonstrations et applications de CSFS/CTV** : Les travaux autour de [BIP448][] (le lot [tapscript][topic tapscript] composé
-  de `OP_TEMPLATEHASH`, [`OP_CHECKSIGFROMSTACK`][topic op_checksigfromstack] (CSFS), et `OP_INTERNALKEY` ; voir [Bulletin #397][news397
+  de `OP_TEMPLATEHASH`, [`OP_CHECKSIGFROMSTACK`][topic op_checksigfromstack] (CSFS), et `OP_INTERNALKEY` ; voir le [Bulletin #397][news397
   bip448]) se poursuivent avec de nouveaux sites agrégeant démonstrations, implémentations et preuves de concept. Une organisation GitHub
   [BIP448][bip448 org] rassemble des implémentations (Bitcoin Inquisition, un patch Bitcoin Core sans activation, l'[intégration miniscript
   et PSBT][news395 thikcs], des BOLTs [LN-Symmetry][topic eltoo] en brouillon et une implémentation Core Lightning, et une [démo][news419
@@ -138,8 +138,7 @@ les nouvelles versions ou d'aider à tester les versions candidates._
   pendant 14 jours après la publication binaire du 28 août afin de ralentir les attaquants dans leur rétro-ingénierie des correctifs. Après
   cela, les [builds reproductibles][topic reproducible builds] de CLN permettront aux utilisateurs de vérifier les binaires. Entre le 28
   août et le 1er septembre, les utilisateurs Docker ayant récupéré les tags `v26.06.7` ou `latest` ont reçu des images qui indiquaient la
-  nouvelle version mais ne contenaient pas les correctifs. Ces utilisateurs devraient vérifier le digest de leur image et la récupérer à
-  nouveau.
+  nouvelle version mais ne contenaient pas les correctifs. Ces utilisateurs devraient vérifier le digest de leur image et la récupérer à nouveau.
 
 - [LND v0.21.3-beta][] est une version de maintenance de cette implémentation populaire de nœud LN. Elle inclut les limites de ressources
   par pair, le correctif d'encodage de `channel_update`, et le correctif de résolution des [HTLC][topic htlc] de poussière décrits dans la
@@ -147,7 +146,7 @@ les nouvelles versions ou d'aider à tester les versions candidates._
   [Bulletin #420][news420 lnd deadlock]. Elle corrige également un bogue de frais de fermeture coopérative pour les canaux avec sorties
   auxiliaires tels que les canaux [Taproot Assets][topic client-side validation], un échec de migration native SQL des factures [AMP][topic
   amp] héritées, une panique du proxy REST WebSocket, ainsi que plusieurs bogues de requêtes gossip et de fermeture coopérative, et ajoute
-  le RPC expérimental `XCreateAccount` (voir [Bulletin #419][news419 lnd account]).
+  le RPC expérimental `XCreateAccount` (voir le [Bulletin #419][news419 lnd account]).
 
 - [LND v0.20.4-beta][] est une version de maintenance de la branche de version 0.20 de LND. Elle rétroporte la plupart des correctifs de la
   0.21.3-beta, y compris les limites de ressources par pair, le correctif d'encodage de `channel_update`, et le correctif de résolution des
@@ -163,7 +162,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
 
 - [Bitcoin Core #36111][] limite la mémoire utilisée par la RPC `validateaddress` lors du signalement d'erreurs pour des chaînes
   [bech32][topic bech32] excessivement longues. Auparavant, pour les chaînes dépassant la limite de 90 caractères fixée par [BIP173][],
-  chaque position au-delà de la limite était renvoyée comme emplacement d'erreur (voir [Bulletin #177][news177 bech32]) et convertie en une
+  chaque position au-delà de la limite était renvoyée comme emplacement d'erreur (voir le [Bulletin #177][news177 bech32]) et convertie en une
   valeur JSON distincte. Désormais, la RPC ne renvoie que la position 90, là où la violation de longueur commence. Dans les tests de
   l'auteur, une requête authentifiée proche de la taille maximale de requête HTTP utilisait environ 5,7 Gio de mémoire avant le changement
   et 240 Mio après.
@@ -183,7 +182,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
 
 - [Eclair #3368][] corrige un bogue où un message `commitment_signed` reçu d'un pair sur un canal non-[taproot][topic taproot] pouvait
   contenir le TLV `partial_signature_with_nonce` utilisé par les [simple taproot channels][topic simple taproot channels] pour leurs
-  signatures partielles [MuSig2][topic musig] (voir [Bulletin #404][news404 eclair taproot]). Bien qu'Eclair vérifiait correctement la
+  signatures partielles [MuSig2][topic musig] (voir le [Bulletin #404][news404 eclair taproot]). Bien qu'Eclair vérifiait correctement la
   signature ECDSA ordinaire du message, il stockait incorrectement la signature partielle non sollicitée comme étant la signature du pair.
   Cela empêchait Eclair de forcer la fermeture du canal plus tard. Désormais, Eclair sélectionne le type de signature correspondant au
   format d'engagement du canal avant la vérification et ne stocke que la signature vérifiée.
@@ -207,7 +206,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   entrants][topic inbound forwarding fees] soient signées exactement sur les octets qu'il diffuse. Auparavant, ces octets pouvaient
   différer, ce qui amenait les pairs à rejeter la mise à jour. Les mises à jour que LND relaie depuis d'autres nœuds conservent désormais
   aussi tous les enregistrements TLV qu'il ne reconnaît pas, au lieu de les supprimer et d'invalider la signature de l'émetteur d'origine
-  (voir [Bulletin #418][news418 eclair flags] pour un correctif similaire dans Eclair).
+  (voir le [Bulletin #418][news418 eclair flags] pour un correctif similaire dans Eclair).
 
 - [LND #11140][] corrige la façon dont LND gère un [HTLC][topic htlc] relayé lorsque le canal sortant force sa fermeture et que le HTLC est
   [élagué][topic trimmed htlc] comme [poussière][topic uneconomical outputs] sur la transaction d'engagement d'une des parties mais pas de
