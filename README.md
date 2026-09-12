@@ -21,6 +21,15 @@ Secrets requis :
 
 Le token inter-depots n'est utilise qu'apres l'approbation humaine. Si le secret est absent, la preparation et la notification de relecture fonctionnent, mais la publication amont s'arrete avec un message explicite.
 
+### Nettoyage des branches publiées
+
+Le workflow `.github/workflows/cleanup-merged-newsletter-branches.yml` contrôle chaque jour les branches de relecture et de publication. Il supprime uniquement :
+
+- une branche `Newsletter-N-translate-in-French` du fork lorsque sa PR vers `bitcoinops/bitcoinops.github.io:master` est fusionnée et que le fichier traduit est présent sur `master` ;
+- la branche `review/newsletter-N-*` correspondante après la même double vérification et seulement si son fichier est identique à celui publié.
+
+La branche du fork doit encore pointer sur le commit fusionné. Les PR amont ouvertes, fermées sans fusion, dont le fichier n'est pas publié sur `master`, ou les branches modifiées après publication sont conservées. Le lancement manuel est en simulation par défaut (`dry_run: true`). Le lancement planifié quotidien effectue le nettoyage réel.
+
 ## Workflow mensuel automatique vers `bitcoinops.github.io`
 Oui, c'est possible de tout chaîner automatiquement :
 1. Sélectionner le plus ancien mois qui n'est pas encore complètement traduit.
