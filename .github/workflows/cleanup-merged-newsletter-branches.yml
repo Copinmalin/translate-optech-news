@@ -1,0 +1,70 @@
+name: Cleanup merged newsletter branches
+
+run-name: Cleanup merged newsletter branches
+
+on:
+  schedule:
+    # Vérification quotidienne après les heures habituelles de fusion amont.
+    - cron: "37 20 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Afficher les branches éligibles sans les supprimer"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cleanup-merged-newsletter-branches
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tooling repository
+        uses: actions/checkout@v6
+
+      - name: Require the cross-repository token
+        env:
+          BITCOINOPS_REPO_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+        shell: bash
+        run: |
+          if [ -z "$BITCOINOPS_REPO_TOKEN" ]; then
+            echo "::error::Le secret BITCOINOPS_REPO_TOKEN est requis."
+            exit 1
+          fi
+
+      - name: Clean published branches from the French fork
+        env:
+          GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(
+            --target-repo Copinmalin/bitcoinops.github.io
+            --branch-kind fork
+          )
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.dry_run }}" = "false" ]; then
+            args+=(--execute)
+          fi
+          python scripts/cleanup_merged_newsletter_branches.py "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Clean matching review branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(
+            --target-repo Copinmalin/translate-optech-news
+            --branch-kind review
+          )
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.dry_run }}" = "false" ]; then
+            args+=(--execute)
+          fi
+          python scripts/cleanup_merged_newsletter_branches.py "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
