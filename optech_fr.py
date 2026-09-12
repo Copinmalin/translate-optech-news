@@ -216,13 +216,43 @@ def apply_preferred_terms(text: str, preferred_terms: dict[str, str]) -> str:
     return "\n".join(out)
 
 
+NEWSLETTER_REFERENCE_RE = re.compile(
+    r"\[(?:Newsletter|Bulletin)(?P<spacing>\s+)(?P<hash>\\?#)(?P<number>\d+)\]\[(?P<reference>[^\]]+)\]",
+    re.IGNORECASE,
+)
+NEWSLETTER_DETERMINER_RE = re.compile(
+    r"(?:\b(?:le|la|les|un|une|des|du|au|aux|ce|cet|cette|ces|chaque|notre|votre|leur|son|mon|ton)\s+|l['’]\s*)$",
+    re.IGNORECASE,
+)
+
+
+def _newsletter_link_starts_sentence(prefix: str) -> bool:
+    stripped = prefix.rstrip()
+    if not stripped:
+        return True
+    if stripped.endswith((".", "!", "?")):
+        return True
+
+    current_line = prefix.rsplit("\n", 1)[-1]
+    without_markers = re.sub(r"^\s*(?:(?:[-*+]|\d+\.)\s+|>\s*)*", "", current_line)
+    return not without_markers
+
+
 def normalize_newsletter_reference_labels(text: str) -> str:
-    """Force le libellé FR avec article pour les liens de type [Newsletter #xx][ref]."""
-    return re.sub(
-        r"\[Newsletter\s+#(\d+)\]\[([^\]]+)\]",
-        r"le [Bulletin #\1][\2]",
-        text,
-    )
+    """Normalise les liens de bulletin et ajoute leur article français si nécessaire."""
+
+    def replace(match: re.Match[str]) -> str:
+        link = (
+            f"[Bulletin{match.group('spacing')}{match.group('hash')}{match.group('number')}]"
+            f"[{match.group('reference')}]"
+        )
+        prefix = text[: match.start()]
+        if NEWSLETTER_DETERMINER_RE.search(prefix):
+            return link
+        article = "Le " if _newsletter_link_starts_sentence(prefix) else "le "
+        return article + link
+
+    return NEWSLETTER_REFERENCE_RE.sub(replace, text)
 
 def apply_preferred_replacements(text: str, preferences: dict) -> str:
     terms = preferences.get("preferred_terms", {})
