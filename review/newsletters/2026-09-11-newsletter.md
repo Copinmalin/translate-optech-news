@@ -7,7 +7,7 @@ type: newsletter
 layout: newsletter
 lang: fr
 ---
-Le bulletin de cette semaine décrit un protocole proposé pour des coinjoins probabilistes déguisés en paris dissimulés et résume des
+Le bulletin de cette semaine décrit une proposition de protocole pour des coinjoins probabilistes déguisés en paris dissimulés et résume des
 benchmarks d'un serveur d'indexation de silent payments comparé aux filtres de blocs compacts pour les clients légers. Sont également
 incluses nos rubriques habituelles annonçant de nouvelles versions et versions candidates et décrivant les changements notables apportés aux
 logiciels populaires d'infrastructure Bitcoin.
@@ -131,7 +131,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
 - [Bitcoin Core #36123][] et [#36169][bitcoin core #36169] corrigent une croissance de mémoire non bornée et le partage de port sous Windows
   dans le serveur HTTP de remplacement (voir les bulletins [#411][news411 http] et [#420][news420 http]). La première empêche un client de
   faire croître indéfiniment le tampon de réception par connexion du serveur en envoyant des requêtes plus vite que le serveur ne peut les
-  traiter. Les lectures sur socket sont désormais interrompues lorsque des requêtes tamponnées attendent d'être traitées, permettant à la
+  traiter. Les lectures sur socket sont désormais interrompues lorsque des requêtes mises en tampon attendent d'être traitées, permettant à la
   contre-pression TCP de ralentir l'expéditeur. La seconde PR réserve l'adresse et le port exclusivement aux sockets d'écoute Windows.
   Auparavant, un autre processus local pouvait se lier au même point de terminaison et potentiellement recevoir des connexions contenant des
   identifiants RPC. Dans le test d'un relecteur, seize connexions REST ont augmenté l'utilisation mémoire de 3,2 Go avant la correction du
