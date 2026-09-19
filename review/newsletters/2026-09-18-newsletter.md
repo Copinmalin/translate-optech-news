@@ -8,7 +8,7 @@ layout: newsletter
 lang: fr
 ---
 Le bulletin de cette semaine résume une analyse des contrôleurs de difficulté des pools de minage qui laissent de côté les mineurs ralentis,
-décrit une amélioration proposée au téléchargement initial des blocs d'Utreexo, et renvoie vers une ébauche de BIP pour spécifier des clés
+décrit une proposition d'amélioration au téléchargement initial des blocs d'Utreexo, et renvoie vers une ébauche de BIP pour spécifier des clés
 internes taproot non dépensables. Sont également incluses nos rubriques régulières décrivant les changements récents dans les services et
 logiciels clients, annonçant de nouvelles versions et versions candidates, et décrivant des changements notables dans des logiciels
 d'infrastructure Bitcoin populaires.
@@ -143,9 +143,8 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   blocs vers le pair bloquant pendant deux minutes. Les pairs manuels restent soumis à des délais distincts pour le téléchargement de blocs
   et la synchronisation des en-têtes.
 
-- [Bitcoin Core #36081][] ajoute un champ `bestblockhash` à la réponse du RPC `getmininginfo`. Avec l'objet `next` existant (voir le
-  [Bulletin
-  #339][news339 mininginfo]), cela permet au logiciel de minage d'obtenir le hachage de la
+- [Bitcoin Core #36081][] ajoute un champ `bestblockhash` à la réponse du RPC `getmininginfo`. Avec l'objet `next` existant
+  (voir le [Bulletin #339][news339 mininginfo]), cela permet au logiciel de minage d'obtenir le hachage de la
   pointe actuelle et la cible de difficulté du bloc suivant via un seul appel RPC. Auparavant, obtenir le hachage et les informations de
   minage via des appels RPC séparés pouvait entrer en concurrence avec un changement de pointe, produisant des valeurs se référant à des
   pointes différentes.
@@ -204,8 +203,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   une nouvelle interception et le rejeter si l'expiration était trop proche, par exemple, même si le HTLC sortant restait actif. Désormais,
   LND vérifie les enregistrements de transfert existants, permettant au rejeu de se poursuivre jusqu'à la résolution du paiement d'origine.
   Pour les paiements toujours en attente de la décision de l'intercepteur, LND conserve au contraire le HTLC en attente avec sa date limite
-  d'échec automatique d'origine (voir le [Bulletin
-  #224][news224 intercept]), évitant une seconde vérification d'expiration lors du rejeu.
+  d'échec automatique d'origine (voir le [Bulletin #224][news224 intercept]), évitant une seconde vérification d'expiration lors du rejeu.
 
 - [BDK #2246][] et [#2263][bdk #2263] améliorent la classification du solde du portefeuille (voir le [Bulletin #213][news213 balance]) en
   vérifiant l'ascendance transactionnelle non réglée d'une sortie. Auparavant, la monnaie rendue issue de la dépense d'un paiement entrant
