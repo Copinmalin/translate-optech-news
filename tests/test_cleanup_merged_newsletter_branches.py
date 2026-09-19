@@ -87,6 +87,34 @@ class CleanupMergedNewsletterBranchesTests(unittest.TestCase):
     @patch("scripts.cleanup_merged_newsletter_branches.branch_is_safe_to_delete", return_value=True)
     @patch("scripts.cleanup_merged_newsletter_branches.find_merged_upstream_pr")
     @patch("scripts.cleanup_merged_newsletter_branches.list_branches")
+    def test_monthly_review_and_fork_branches_are_supported(self, branches, merged_pr, safe, files):
+        branches.return_value = ["Newsletters-2022-07-translate-in-French"]
+        merged_pr.return_value = {"number": 3000, "head": {"sha": "abc"}}
+        files.return_value = (
+            "_posts/fr/newsletters/2022-07-06-newsletter.md",
+            "_posts/fr/newsletters/2022-07-13-newsletter.md",
+        )
+
+        candidates, retained = discover_candidates(
+            "Copinmalin/bitcoinops.github.io",
+            "fork",
+            "bitcoinops/bitcoinops.github.io",
+            "Copinmalin",
+        )
+
+        self.assertEqual(len(candidates), 1)
+        self.assertEqual(candidates[0].newsletter_key, "2022-07")
+        self.assertEqual(retained, [])
+        merged_pr.assert_called_once_with(
+            "bitcoinops/bitcoinops.github.io",
+            "Copinmalin",
+            "Newsletters-2022-07-translate-in-French",
+        )
+
+    @patch("scripts.cleanup_merged_newsletter_branches.published_newsletter_files")
+    @patch("scripts.cleanup_merged_newsletter_branches.branch_is_safe_to_delete", return_value=True)
+    @patch("scripts.cleanup_merged_newsletter_branches.find_merged_upstream_pr")
+    @patch("scripts.cleanup_merged_newsletter_branches.list_branches")
     def test_missing_master_file_retains_branch(self, branches, merged_pr, safe, files):
         branches.return_value = ["review/newsletter-421-33917758394"]
         merged_pr.return_value = {"number": 2873}
@@ -131,6 +159,30 @@ class CleanupMergedNewsletterBranchesTests(unittest.TestCase):
                 ("_posts/fr/newsletters/2026-09-04-newsletter.md",),
             )
         )
+
+    @patch("scripts.cleanup_merged_newsletter_branches.run_gh_api")
+    def test_monthly_review_files_must_match_published_master_files(self, api):
+        api.side_effect = [
+            {"sha": "first"},
+            {"sha": "first"},
+            {"sha": "second"},
+            {"sha": "second"},
+        ]
+
+        self.assertTrue(
+            branch_is_safe_to_delete(
+                "Copinmalin/translate-optech-news",
+                "review",
+                "review/month-2022-07-1234",
+                "bitcoinops/bitcoinops.github.io",
+                {"head": {"sha": "unused"}},
+                (
+                    "_posts/fr/newsletters/2022-07-06-newsletter.md",
+                    "_posts/fr/newsletters/2022-07-13-newsletter.md",
+                ),
+            )
+        )
+        self.assertIn("review/months/2022-07/2022-07-06-newsletter.md", api.call_args_list[0].args[0])
 
 
 if __name__ == "__main__":

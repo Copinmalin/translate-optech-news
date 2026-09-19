@@ -30,48 +30,37 @@ Le workflow `.github/workflows/cleanup-merged-newsletter-branches.yml` contrôle
 
 La branche du fork doit encore pointer sur le commit fusionné. Les PR amont ouvertes, fermées sans fusion, dont le fichier n'est pas publié sur `master`, ou les branches modifiées après publication sont conservées. Le lancement manuel est en simulation par défaut (`dry_run: true`). Le lancement planifié quotidien effectue le nettoyage réel.
 
-## Workflow mensuel automatique vers `bitcoinops.github.io`
-Oui, c'est possible de tout chaîner automatiquement :
-1. Sélectionner le plus ancien mois qui n'est pas encore complètement traduit.
-2. Lancer la traduction des newsletters manquantes de ce mois.
-3. Copier les fichiers FR dans un clone local de `Copinmalin/bitcoinops.github.io`.
-4. Créer une branche + un commit avec le titre `Newsletter yyyy.mm translate in French`.
-5. Afficher ou créer la PR GitHub.
+## Rattrapage mensuel chaîné
 
-Le script dédié est `scripts/sync_monthly_translation_pr.py`.
+Le workflow `.github/workflows/monthly-sync-pr.yml` traduit l'historique dans l'ordre, un mois à la fois :
 
-### Exemple (sélection automatique du mois)
+1. il lit les newsletters anglaises et françaises depuis `bitcoinops/bitcoinops.github.io:master` ;
+2. il tient compte des traductions déjà présentes dans des PR ouvertes ;
+3. il sélectionne le plus ancien mois incomplet depuis la première newsletter, publiée le 8 juin 2018 ;
+4. il traduit les newsletters manquantes du mois et applique la même réparation de liens que le workflow hebdomadaire ;
+5. il ouvre une PR brouillon de relecture dans ce dépôt, assignée à `Copinmalin` ;
+6. après passage en **Ready for review** et review **Approve**, il crée la branche mensuelle du fork et une PR vers `bitcoinops/bitcoinops.github.io:master` ;
+7. il ferme la PR de relecture puis déclenche automatiquement la préparation du mois incomplet suivant.
+
+Une seule PR mensuelle de relecture peut être ouverte à la fois. La chaîne s'arrête naturellement quand toutes les newsletters sont traduites ou déjà couvertes par des PR ouvertes. Le lancement manuel permet de la démarrer ou de la reprendre. Le lancement planifié du premier jour du mois sert de filet de sécurité.
+
+Ne pas fusionner les PR de relecture dans le dépôt d'outillage. L'approbation humaine est la seule commande de publication et de progression vers le mois suivant.
+
+Le script `scripts/sync_monthly_translation_pr.py` peut aussi préparer localement le plus ancien mois incomplet à partir d'un clone de l'amont :
+
 ```bash
 python scripts/sync_monthly_translation_pr.py \
   --bitcoinops-repo /path/to/bitcoinops.github.io \
-  --print-gh-pr
+  --work-dir output/monthly-workflow
 ```
 
-### Exemple (forcer un mois)
-```bash
-python scripts/sync_monthly_translation_pr.py \
-  --bitcoinops-repo /path/to/bitcoinops.github.io \
-  --month 2026-03 \
-  --print-gh-pr
-```
+Options utiles :
 
-### Exemple (création directe de la PR)
-```bash
-python scripts/sync_monthly_translation_pr.py \
-  --bitcoinops-repo /path/to/bitcoinops.github.io \
-  --create-pr
-```
-
-### Notes
-- Le script utilise `optech_fr.py` pour la traduction (requiert `OPENAI_API_KEY`).
-- `--min-date` permet de limiter la période analysée.
-- `--work-dir` permet d'isoler les fichiers générés pendant le workflow.
-
-
-## GitHub Action
-Un workflow GitHub Actions est disponible dans `.github/workflows/monthly-sync-pr.yml` pour lancer ce script depuis l'interface Actions.
+- `--month YYYY-MM` force un mois précis ;
+- `--min-date YYYY-MM-DD` change le début de la plage ;
+- `--covered-slugs-file` exclut les fichiers déjà couverts par des PR ouvertes.
 
 Secrets requis :
-- `OPENAI_API_KEY` : clé OpenAI pour la traduction.
-- `BITCOINOPS_REPO_TOKEN` : token GitHub **nécessaire** pour push/PR cross-repo avec droits d'écriture sur `Copinmalin/bitcoinops.github.io`.  
-  Sans ce secret, le workflow exécute la traduction/commit localement dans le job puis **ignore** le push/PR (warning explicite) pour éviter l'erreur 403.
+
+- `OPENAI_API_KEY` pour préparer les traductions ;
+- `BITCOINOPS_REPO_TOKEN` uniquement après l'approbation, pour pousser dans `Copinmalin/bitcoinops.github.io` et ouvrir la PR amont.
