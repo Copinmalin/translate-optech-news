@@ -11,7 +11,7 @@ Le workflow :
 2. ne fait rien si sa traduction est deja présente sur `bitcoinops/bitcoinops.github.io:master` ;
 3. traduit la newsletter et repare ses liens internes ;
 4. ouvre une PR brouillon dans ce depot et demande une relecture a `Copinmalin` ;
-5. apres passage en **Ready for review** et review **Approve**, synchronise le `master` du fork avec l'amont, cree la branche `Newsletter-N-translate-in-French` depuis ce `master` à jour, revalide et rebase la branche si l'amont a avancé, puis ouvre la PR vers `bitcoinops/bitcoinops.github.io:master` ;
+5. apres passage en **Ready for review** et review **Approve**, synchronise le `master` du fork avec l'amont, cree la branche `Newsletter-N-translate-in-French` depuis ce `master` à jour, revalide et rebase la branche si l'amont a avancé, exécute `make production`, puis ouvre la PR vers `bitcoinops/bitcoinops.github.io:master` uniquement si le contrôle réussit ;
 6. ferme la PR de relecture sans la fusionner dans le depot d'outillage.
 
 Secrets requis :
@@ -39,12 +39,14 @@ Le workflow `.github/workflows/monthly-sync-pr.yml` traduit l'historique dans l'
 3. il sélectionne le plus ancien mois incomplet depuis la première newsletter, publiée le 8 juin 2018 ;
 4. il traduit les newsletters manquantes du mois et applique la même réparation de liens que le workflow hebdomadaire ;
 5. il ouvre une PR brouillon de relecture dans ce dépôt, assignée à `Copinmalin` ;
-6. après passage en **Ready for review** et review **Approve**, il synchronise le `master` du fork avec l'amont, crée la branche mensuelle depuis ce `master` à jour, la rebase si l'amont a avancé et ouvre une PR vers `bitcoinops/bitcoinops.github.io:master` ;
+6. après passage en **Ready for review** et review **Approve**, il synchronise le `master` du fork avec l'amont, crée la branche mensuelle depuis ce `master` à jour, la rebase si l'amont a avancé, exécute `make production` et ouvre une PR vers `bitcoinops/bitcoinops.github.io:master` uniquement si le contrôle réussit ;
 7. il ferme la PR de relecture puis déclenche automatiquement la préparation du mois incomplet suivant.
 
 Une seule PR mensuelle de relecture peut être ouverte à la fois. La chaîne s'arrête naturellement quand toutes les newsletters sont traduites ou déjà couvertes par des PR ouvertes. Le lancement manuel permet de la démarrer ou de la reprendre. Le lancement planifié du premier jour du mois sert de filet de sécurité.
 
 La synchronisation du fork est uniquement un fast-forward. Si son `master` contient des commits absents de Bitcoin Optech, la publication s'arrête explicitement au lieu de réécrire ou perdre ces commits.
+
+Le préflight utilise Ruby 3.4, `optipng` et la commande `make production` définie par Bitcoin Optech, comme Travis CI. Il contrôle notamment le format Markdown, les métadonnées, les schémas, la construction Jekyll, les ancres et les liens internes avec HTML-Proofer. Le déploiement Netlify reste exécuté par Bitcoin Optech après ouverture de la PR, car il dépend de leur environnement hébergé.
 
 Ne pas fusionner les PR de relecture dans le dépôt d'outillage. L'approbation humaine est la seule commande de publication et de progression vers le mois suivant.
 

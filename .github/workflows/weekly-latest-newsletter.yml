@@ -186,7 +186,9 @@ jobs:
       github.event.review.user.login == 'Copinmalin' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       startsWith(github.event.pull_request.head.ref, 'review/newsletter-')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    env:
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: "true"
 
     steps:
       - name: Require the cross-repository token
@@ -218,7 +220,19 @@ jobs:
           set -euo pipefail
           python scripts/sync_bitcoinops_fork.py --repo target_repo | tee -a "$GITHUB_STEP_SUMMARY"
 
-      - name: Publish the reviewed translation
+      - name: Install Bitcoin Optech system test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y optipng
+
+      - name: Set up Bitcoin Optech Ruby dependencies
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+          working-directory: target_repo
+
+      - name: Validate and publish the reviewed translation
         id: publish
         env:
           GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
@@ -271,6 +285,11 @@ jobs:
           python scripts/sync_bitcoinops_fork.py --repo target_repo | tee -a "$GITHUB_STEP_SUMMARY"
           git -C target_repo checkout "$branch"
           git -C target_repo rebase origin/master
+
+          echo "Exécution du contrôle Bitcoin Optech : make production" | tee -a "$GITHUB_STEP_SUMMARY"
+          make -C target_repo production
+          echo "Contrôle Bitcoin Optech réussi avant publication." | tee -a "$GITHUB_STEP_SUMMARY"
+
           git -C target_repo push --set-upstream origin "$branch"
 
           pr_url=$(gh pr create \
