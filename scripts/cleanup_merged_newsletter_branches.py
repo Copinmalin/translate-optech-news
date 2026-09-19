@@ -13,13 +13,15 @@ from urllib.parse import quote
 
 FORK_BRANCH_RE = re.compile(r"^Newsletter-(?P<number>\d+)-translate-in-French$")
 REVIEW_BRANCH_RE = re.compile(r"^review/newsletter-(?P<number>\d+)-\d+$")
+MONTHLY_FORK_BRANCH_RE = re.compile(r"^Newsletters-(?P<month>\d{4}-\d{2})-translate-in-French$")
+MONTHLY_REVIEW_BRANCH_RE = re.compile(r"^review/month-(?P<month>\d{4}-\d{2})-\d+$")
 NEWSLETTER_FILE_RE = re.compile(r"^_posts/fr/newsletters/\d{4}-\d{2}-\d{2}-newsletter\.md$")
 
 
 @dataclass(frozen=True)
 class CleanupCandidate:
     branch: str
-    newsletter_number: str
+    newsletter_key: str
     upstream_pr: int
     published_files: tuple[str, ...]
 
@@ -65,8 +67,7 @@ def list_branches(repository: str) -> list[str]:
     return [item["name"] for item in flatten_pages(pages)]
 
 
-def find_merged_upstream_pr(upstream_repo: str, owner: str, newsletter_number: str) -> dict | None:
-    branch = f"Newsletter-{newsletter_number}-translate-in-French"
+def find_merged_upstream_pr(upstream_repo: str, owner: str, branch: str) -> dict | None:
     endpoint = (
         f"repos/{upstream_repo}/pulls?state=all&base=master"
         f"&head={owner}:{branch}&per_page=100"
@@ -109,7 +110,11 @@ def branch_is_safe_to_delete(
 
     for published_path in published_files:
         filename = published_path.rsplit("/", 1)[-1]
-        review_path = quote(f"review/newsletters/{filename}", safe="/")
+        if match := MONTHLY_REVIEW_BRANCH_RE.fullmatch(branch):
+            review_source = f"review/months/{match.group('month')}/{filename}"
+        else:
+            review_source = f"review/newsletters/{filename}"
+        review_path = quote(review_source, safe="/")
         review_file = run_gh_api(
             f"repos/{target_repo}/contents/{review_path}?ref={encoded_branch}"
         )
@@ -127,16 +132,23 @@ def discover_candidates(
     upstream_repo: str,
     owner: str,
 ) -> tuple[list[CleanupCandidate], list[str]]:
-    pattern = FORK_BRANCH_RE if branch_kind == "fork" else REVIEW_BRANCH_RE
     candidates: list[CleanupCandidate] = []
     retained: list[str] = []
 
     for branch in sorted(list_branches(target_repo)):
-        match = pattern.fullmatch(branch)
-        if not match:
+        weekly_pattern = FORK_BRANCH_RE if branch_kind == "fork" else REVIEW_BRANCH_RE
+        monthly_pattern = MONTHLY_FORK_BRANCH_RE if branch_kind == "fork" else MONTHLY_REVIEW_BRANCH_RE
+        weekly_match = weekly_pattern.fullmatch(branch)
+        monthly_match = monthly_pattern.fullmatch(branch)
+        if not weekly_match and not monthly_match:
             continue
-        number = match.group("number")
-        pull = find_merged_upstream_pr(upstream_repo, owner, number)
+        if weekly_match:
+            key = weekly_match.group("number")
+            publication_branch = f"Newsletter-{key}-translate-in-French"
+        else:
+            key = monthly_match.group("month")
+            publication_branch = f"Newsletters-{key}-translate-in-French"
+        pull = find_merged_upstream_pr(upstream_repo, owner, publication_branch)
         if pull is None:
             retained.append(branch)
             continue
@@ -154,7 +166,7 @@ def discover_candidates(
         ):
             retained.append(branch)
             continue
-        candidates.append(CleanupCandidate(branch, number, pull["number"], files))
+        candidates.append(CleanupCandidate(branch, key, pull["number"], files))
 
     return candidates, retained
 

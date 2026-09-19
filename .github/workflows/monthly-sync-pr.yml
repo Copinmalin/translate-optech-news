@@ -1,44 +1,66 @@
-name: Monthly FR translation sync PR
+name: Monthly FR newsletter review chain
+
+run-name: >-
+  ${{ github.event_name == 'pull_request_review'
+      && format('Publish reviewed monthly PR #{0}', github.event.pull_request.number)
+      || 'Prepare oldest incomplete month for review' }}
 
 on:
+  schedule:
+    # Filet de sécurité : redémarre la chaîne le premier jour du mois si elle s'est arrêtée.
+    - cron: "15 7 1 * *"
   workflow_dispatch:
     inputs:
       min_date:
         description: "Date minimale à considérer (YYYY-MM-DD)"
         required: false
-        default: "2022-07-01"
+        default: "2018-06-08"
       month:
-        description: "Mois forcé (YYYY-MM). Laisser vide pour sélection auto du plus ancien mois incomplet"
+        description: "Mois forcé (YYYY-MM), vide pour le plus ancien mois incomplet"
         required: false
         default: ""
       model:
         description: "Modèle OpenAI"
         required: false
         default: "gpt-5.4"
-      create_pr:
-        description: "Créer automatiquement la PR après commit"
-        required: true
-        type: boolean
-        default: false
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: >-
+    monthly-fr-newsletter-${{
+      github.event_name == 'pull_request_review'
+      && github.event.pull_request.number
+      || 'prepare'
+    }}
+  cancel-in-progress: false
 
 jobs:
-  monthly-sync:
+  prepare-review:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      MIN_DATE: ${{ inputs.min_date || '2018-06-08' }}
+      FORCED_MONTH: ${{ inputs.month || '' }}
+      OPENAI_MODEL: ${{ inputs.model || 'gpt-5.4' }}
 
     steps:
-      - name: Checkout tooling repo
+      - name: Checkout tooling repository
         uses: actions/checkout@v6
 
-      - name: Checkout bitcoinops.github.io
+      - name: Checkout authoritative Bitcoin Optech repository
         uses: actions/checkout@v6
         with:
-          repository: Copinmalin/bitcoinops.github.io
+          repository: bitcoinops/bitcoinops.github.io
           ref: master
-          path: target_repo
-          token: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
-          fetch-depth: 0
+          path: upstream_repo
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -50,69 +72,297 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Configure git identity
-        run: |
-          git -C target_repo config user.name "github-actions[bot]"
-          git -C target_repo config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Run monthly sync workflow script
+      - name: Refuse a second open monthly review
+        id: review_gate
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          CMD=(python scripts/sync_monthly_translation_pr.py \
-            --bitcoinops-repo target_repo \
-            --work-dir output/monthly-workflow \
-            --min-date "${{ inputs.min_date }}" \
-            --model "${{ inputs.model }}")
-
-          if [ -n "${{ inputs.month }}" ]; then
-            CMD+=(--month "${{ inputs.month }}")
+          set -euo pipefail
+          open_pr=$(gh pr list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --limit 100 \
+            --json number,headRefName \
+            --jq '.[] | select(.headRefName | startswith("review/month-")) | .number' \
+            | head -n 1)
+          if [ -n "$open_pr" ]; then
+            echo "blocked=true" >> "$GITHUB_OUTPUT"
+            echo "Une relecture mensuelle est déjà ouverte : #$open_pr" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "blocked=false" >> "$GITHUB_OUTPUT"
           fi
 
-          if [ "${{ inputs.create_pr }}" = "true" ]; then
-            CMD+=(--print-gh-pr)
-          fi
-
-          "${CMD[@]}"
-
-      - name: Capture branch and title
-        id: capture
+      - name: Inventory newsletters already covered by open pull requests
+        if: steps.review_gate.outputs.blocked == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          BRANCH=$(git -C target_repo branch --show-current)
-          TITLE=$(git -C target_repo log -1 --pretty=%s)
-          echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
-          echo "title=${TITLE}" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          : > covered-newsletters.txt
 
-      - name: Detect bitcoinops write token
-        id: bitcoinops_token
+          gh pr list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --limit 100 \
+            --json number \
+            --jq '.[].number' |
+          while read -r pr; do
+            [ -z "$pr" ] && continue
+            gh api --paginate "repos/${GITHUB_REPOSITORY}/pulls/${pr}/files?per_page=100" \
+              --jq '.[] | select(.filename | test("^review/(newsletters|months/.+)/.+-newsletter[.]md$")) | .filename'
+          done >> covered-newsletters.txt
+
+          gh pr list \
+            --repo bitcoinops/bitcoinops.github.io \
+            --state open \
+            --author Copinmalin \
+            --limit 100 \
+            --json number \
+            --jq '.[].number' |
+          while read -r pr; do
+            [ -z "$pr" ] && continue
+            gh api --paginate "repos/bitcoinops/bitcoinops.github.io/pulls/${pr}/files?per_page=100" \
+              --jq '.[] | select(.filename | test("^_posts/fr/newsletters/.+-newsletter[.]md$")) | .filename'
+          done >> covered-newsletters.txt
+
+          sed -i 's#^.*/##' covered-newsletters.txt
+          sort -u -o covered-newsletters.txt covered-newsletters.txt
+          echo "Newsletters couvertes par des PR ouvertes : $(wc -l < covered-newsletters.txt)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Translate the oldest incomplete month
+        if: steps.review_gate.outputs.blocked == 'false'
+        id: monthly
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(
+            --bitcoinops-repo upstream_repo
+            --work-dir output/monthly-workflow
+            --min-date "$MIN_DATE"
+            --model "$OPENAI_MODEL"
+            --covered-slugs-file covered-newsletters.txt
+          )
+          if [ -n "$FORCED_MONTH" ]; then
+            args+=(--month "$FORCED_MONTH")
+          fi
+          python scripts/sync_monthly_translation_pr.py "${args[@]}"
+
+      - name: Repair and validate the translated batch
+        if: steps.monthly.outputs.selected == 'true'
+        env:
+          PYTHONPATH: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/repair_fr_links.py \
+            --mode apply \
+            --target output/monthly-workflow/_posts/fr/newsletters
+          python scripts/validate_monthly_review.py \
+            --batch-dir output/monthly-workflow/_posts/fr/newsletters \
+            --manifest output/monthly-workflow/monthly-manifest.json
+
+      - name: Upload monthly review artifact
+        if: steps.monthly.outputs.selected == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: newsletters-${{ steps.monthly.outputs.month }}-fr-review
+          path: |
+            output/monthly-workflow/_posts/fr/newsletters/*.md
+            output/monthly-workflow/monthly-manifest.json
+          if-no-files-found: error
+
+      - name: Open the draft monthly review pull request
+        if: steps.monthly.outputs.selected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MONTH: ${{ steps.monthly.outputs.month }}
+          FILE_COUNT: ${{ steps.monthly.outputs.file_count }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          review_dir="review/months/$MONTH"
+          mkdir -p "$review_dir"
+          cp output/monthly-workflow/_posts/fr/newsletters/*.md "$review_dir/"
+          cp output/monthly-workflow/monthly-manifest.json "$review_dir/manifest.json"
+
+          branch="review/month-${MONTH}-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add "$review_dir"
+          git commit -m "Prepare ${MONTH} newsletters for French review"
+          git push --set-upstream origin "$branch"
+
+          body=$(cat <<EOF
+          Les ${FILE_COUNT} traductions françaises manquantes de ${MONTH} sont prêtes à relire.
+
+          1. Relire et corriger les fichiers dans \`${review_dir}/\`.
+          2. Passer cette PR de brouillon à **Ready for review**.
+          3. Soumettre une review **Approve** avec le compte \`Copinmalin\`.
+
+          L'approbation créera la PR vers \`bitcoinops/bitcoinops.github.io\`, fermera cette PR de relecture, puis préparera automatiquement le plus ancien mois incomplet suivant.
+
+          Ne pas fusionner cette PR dans le dépôt d'outillage.
+
+          Run : ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
+          EOF
+          )
+
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$branch" \
+            --draft \
+            --title "[Relecture] Newsletters ${MONTH} en français" \
+            --body "$body" \
+            --reviewer Copinmalin
+
+      - name: Report completed backlog
+        if: steps.review_gate.outputs.blocked == 'false' && steps.monthly.outputs.selected == 'false'
+        run: |
+          echo "Aucun nouveau mois à traduire : la plage est complète ou déjà couverte par des PR ouvertes." >> "$GITHUB_STEP_SUMMARY"
+
+  publish-reviewed:
+    if: >-
+      github.event_name == 'pull_request_review' &&
+      github.event.review.state == 'approved' &&
+      github.event.review.user.login == 'Copinmalin' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'review/month-')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Require the cross-repository token
         env:
           BITCOINOPS_REPO_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+        shell: bash
         run: |
-          if [ -n "$BITCOINOPS_REPO_TOKEN" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
+          if [ -z "$BITCOINOPS_REPO_TOKEN" ]; then
+            echo "::error::Le secret BITCOINOPS_REPO_TOKEN est requis pour publier le lot mensuel."
+            exit 1
           fi
 
-      - name: Push branch
-        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.bitcoinops_token.outputs.available == 'true' }}
-        run: |
-          git -C target_repo push --set-upstream origin "${{ steps.capture.outputs.branch }}"
+      - name: Checkout the approved monthly review
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Create pull request
-        if: ${{ inputs.create_pr && steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.bitcoinops_token.outputs.available == 'true' }}
+      - name: Restrict the review PR to monthly translation files
         env:
-          GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          gh pr create \
-            --repo Copinmalin/bitcoinops.github.io \
-            --head "${{ steps.capture.outputs.branch }}" \
-            --base master \
-            --title "${{ steps.capture.outputs.title }}" \
-            --body "Monthly French newsletter translation batch."
+          set -euo pipefail
+          mapfile -t changed_files < <(gh api --paginate \
+            "repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files?per_page=100" \
+            --jq '.[].filename')
+          if [ "${#changed_files[@]}" -eq 0 ]; then
+            echo "::error::La PR de relecture ne contient aucun fichier."
+            exit 1
+          fi
+          for path in "${changed_files[@]}"; do
+            if [[ ! "$path" =~ ^review/months/[0-9]{4}-[0-9]{2}/([0-9]{4}-[0-9]{2}-[0-9]{2}-newsletter\.md|manifest\.json)$ ]]; then
+              echo "::error::Fichier hors du lot mensuel autorisé : $path"
+              exit 1
+            fi
+          done
 
-      - name: Explain skipped push/PR without write token
-        if: ${{ steps.capture.outputs.branch != 'master' && steps.capture.outputs.branch != 'main' && steps.bitcoinops_token.outputs.available == 'false' }}
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install validation dependency
+        run: pip install pyyaml
+
+      - name: Validate the approved batch
+        id: batch
+        shell: bash
         run: |
-          echo "::warning::BITCOINOPS_REPO_TOKEN est absent. La branche locale a bien été créée et commitée dans le job, mais le push/PR est ignoré pour éviter une erreur 403."
+          set -euo pipefail
+          mapfile -t manifests < <(find review/months -mindepth 2 -maxdepth 2 -type f -name manifest.json -print)
+          if [ "${#manifests[@]}" -ne 1 ]; then
+            echo "::error::La PR doit contenir exactement un manifeste mensuel, trouvé : ${#manifests[@]}."
+            exit 1
+          fi
+          manifest="${manifests[0]}"
+          batch_dir=$(dirname "$manifest")
+          python scripts/validate_monthly_review.py --batch-dir "$batch_dir" --manifest "$manifest"
+          month=$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["month"])' "$manifest")
+          echo "month=$month" >> "$GITHUB_OUTPUT"
+          echo "batch_dir=$batch_dir" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout French fork
+        uses: actions/checkout@v6
+        with:
+          repository: Copinmalin/bitcoinops.github.io
+          ref: master
+          path: target_repo
+          token: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+          fetch-depth: 0
+
+      - name: Publish the reviewed month upstream
+        id: publish
+        env:
+          GH_TOKEN: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
+          MONTH: ${{ steps.batch.outputs.month }}
+          BATCH_DIR: ${{ steps.batch.outputs.batch_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="Newsletters-${MONTH}-translate-in-French"
+
+          git -C target_repo remote add upstream https://github.com/bitcoinops/bitcoinops.github.io.git
+          git -C target_repo fetch upstream master
+          git -C target_repo checkout -b "$branch" upstream/master
+
+          mapfile -t files < <(find "$BATCH_DIR" -maxdepth 1 -type f -name '*-newsletter.md' -print | sort)
+          for source_file in "${files[@]}"; do
+            filename=$(basename "$source_file")
+            if git -C target_repo cat-file -e "upstream/master:_posts/fr/newsletters/$filename" 2>/dev/null; then
+              echo "::error::Le fichier existe déjà sur le master amont : $filename"
+              exit 1
+            fi
+          done
+          if git -C target_repo ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "::error::La branche origin/$branch existe déjà."
+            exit 1
+          fi
+
+          mkdir -p target_repo/_posts/fr/newsletters
+          cp "${files[@]}" target_repo/_posts/fr/newsletters/
+          git -C target_repo config user.name "Copinmalin"
+          git -C target_repo config user.email "4174888+Copinmalin@users.noreply.github.com"
+          git -C target_repo add _posts/fr/newsletters
+          git -C target_repo commit -m "Translate ${MONTH} newsletters into French"
+          git -C target_repo push --set-upstream origin "$branch"
+
+          pr_url=$(gh pr create \
+            --repo bitcoinops/bitcoinops.github.io \
+            --base master \
+            --head "Copinmalin:$branch" \
+            --title "Newsletters ${MONTH} translate into French" \
+            --body "French translations reviewed and approved by Copinmalin.")
+          echo "pr_url=$pr_url" >> "$GITHUB_OUTPUT"
+          echo "PR amont créée : $pr_url" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Close the monthly review pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr close "${{ github.event.pull_request.number }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --comment "Relecture validée. PR amont publiée : ${{ steps.publish.outputs.pr_url }}"
+
+      - name: Start the next oldest incomplete month
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh workflow run monthly-sync-pr.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref main
+          echo "Préparation du mois historique suivant déclenchée." >> "$GITHUB_STEP_SUMMARY"
