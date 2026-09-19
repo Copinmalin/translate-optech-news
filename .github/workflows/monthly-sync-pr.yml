@@ -303,6 +303,11 @@ jobs:
           token: ${{ secrets.BITCOINOPS_REPO_TOKEN }}
           fetch-depth: 0
 
+      - name: Synchronize fork master with Bitcoin Optech
+        run: |
+          set -euo pipefail
+          python scripts/sync_bitcoinops_fork.py --repo target_repo | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: Publish the reviewed month upstream
         id: publish
         env:
@@ -313,10 +318,6 @@ jobs:
         run: |
           set -euo pipefail
           branch="Newsletters-${MONTH}-translate-in-French"
-
-          git -C target_repo remote add upstream https://github.com/bitcoinops/bitcoinops.github.io.git
-          git -C target_repo fetch upstream master
-          git -C target_repo checkout -b "$branch" upstream/master
 
           mapfile -t files < <(find "$BATCH_DIR" -maxdepth 1 -type f -name '*-newsletter.md' -print | sort)
           for source_file in "${files[@]}"; do
@@ -331,12 +332,19 @@ jobs:
             exit 1
           fi
 
+          git -C target_repo checkout -b "$branch" origin/master
           mkdir -p target_repo/_posts/fr/newsletters
           cp "${files[@]}" target_repo/_posts/fr/newsletters/
           git -C target_repo config user.name "Copinmalin"
           git -C target_repo config user.email "4174888+Copinmalin@users.noreply.github.com"
           git -C target_repo add _posts/fr/newsletters
           git -C target_repo commit -m "Translate ${MONTH} newsletters into French"
+
+          # Revalide l'amont juste avant le push et rebase le lot si master a
+          # avancé depuis la première synchronisation de ce job.
+          python scripts/sync_bitcoinops_fork.py --repo target_repo | tee -a "$GITHUB_STEP_SUMMARY"
+          git -C target_repo checkout "$branch"
+          git -C target_repo rebase origin/master
           git -C target_repo push --set-upstream origin "$branch"
 
           pr_url=$(gh pr create \

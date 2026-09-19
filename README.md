@@ -8,10 +8,10 @@ Le workflow `.github/workflows/weekly-latest-newsletter.yml` se lance chaque ven
 Le workflow :
 
 1. detecte la derniere newsletter publiee ;
-2. ne fait rien si sa traduction est deja presente sur `Copinmalin/bitcoinops.github.io:master` ;
+2. ne fait rien si sa traduction est deja présente sur `bitcoinops/bitcoinops.github.io:master` ;
 3. traduit la newsletter et repare ses liens internes ;
 4. ouvre une PR brouillon dans ce depot et demande une relecture a `Copinmalin` ;
-5. apres passage en **Ready for review** et review **Approve**, cree la branche `Newsletter-N-translate-in-French` dans le fork puis la PR vers `bitcoinops/bitcoinops.github.io:master` ;
+5. apres passage en **Ready for review** et review **Approve**, synchronise le `master` du fork avec l'amont, cree la branche `Newsletter-N-translate-in-French` depuis ce `master` à jour, revalide et rebase la branche si l'amont a avancé, puis ouvre la PR vers `bitcoinops/bitcoinops.github.io:master` ;
 6. ferme la PR de relecture sans la fusionner dans le depot d'outillage.
 
 Secrets requis :
@@ -39,10 +39,12 @@ Le workflow `.github/workflows/monthly-sync-pr.yml` traduit l'historique dans l'
 3. il sélectionne le plus ancien mois incomplet depuis la première newsletter, publiée le 8 juin 2018 ;
 4. il traduit les newsletters manquantes du mois et applique la même réparation de liens que le workflow hebdomadaire ;
 5. il ouvre une PR brouillon de relecture dans ce dépôt, assignée à `Copinmalin` ;
-6. après passage en **Ready for review** et review **Approve**, il crée la branche mensuelle du fork et une PR vers `bitcoinops/bitcoinops.github.io:master` ;
+6. après passage en **Ready for review** et review **Approve**, il synchronise le `master` du fork avec l'amont, crée la branche mensuelle depuis ce `master` à jour, la rebase si l'amont a avancé et ouvre une PR vers `bitcoinops/bitcoinops.github.io:master` ;
 7. il ferme la PR de relecture puis déclenche automatiquement la préparation du mois incomplet suivant.
 
 Une seule PR mensuelle de relecture peut être ouverte à la fois. La chaîne s'arrête naturellement quand toutes les newsletters sont traduites ou déjà couvertes par des PR ouvertes. Le lancement manuel permet de la démarrer ou de la reprendre. Le lancement planifié du premier jour du mois sert de filet de sécurité.
+
+La synchronisation du fork est uniquement un fast-forward. Si son `master` contient des commits absents de Bitcoin Optech, la publication s'arrête explicitement au lieu de réécrire ou perdre ces commits.
 
 Ne pas fusionner les PR de relecture dans le dépôt d'outillage. L'approbation humaine est la seule commande de publication et de progression vers le mois suivant.
 
