@@ -14,7 +14,7 @@ projets d'infrastructure populaires sont également décrits.
 
 ## Actions requises
 
-- **Aidez à tester Bitcoin Core 0.17.1RC1&nbsp;:** la première version candidate de cette [version de maintenance][] a été [mise en
+- **Aidez à tester Bitcoin Core 0.17.1RC1&nbsp;:** la première version candidate de cette [version de maintenance][maintenance release] a été [mise en
   ligne][V0.17.1rc1]. Les tests par les entreprises et les utilisateurs individuels, à la fois du daemon et de l'interface graphique, sont
   grandement appréciés et aident à garantir une version de la plus haute qualité.
 
@@ -38,7 +38,7 @@ projets d'infrastructure populaires sont également décrits.
   défaut.
 
 - **Options de sighash pour couvrir le poids des transactions&nbsp;:** dans le cadre de la discussion sur les hachages de signature décrite
-  dans la section *Nouvelles* du [bulletin n°23][], Russell O'Connor a [proposé][weight sighash] qu'il devrait exister une capacité
+  dans la section *Nouvelles* du [bulletin #23][], Russell O'Connor a [proposé][weight sighash] qu'il devrait exister une capacité
   optionnelle permettant aux signatures de transaction de s'engager sur le poids (la taille) de la transaction. Cela atténue un problème
   perçu avec certains scripts avancés où il pourrait être possible pour une contrepartie ou un tiers d'ajouter des données supplémentaires à
   une transaction, réduisant son taux de frais et la rendant probablement plus longue à confirmer.
@@ -79,4 +79,4 @@ projets d'infrastructure populaires sont également décrits.
 [explorer announce]: https://blockstream.com/2018/11/06/explorer-launch/
 [explorer code announce]: https://blockstream.com/2018/12/06/esplora-source-announcement/
 [weight sighash]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016534.html
-[le bulletin #23]: /en/newsletters/2018/11/27/#sighash-updates
+[bulletin #23]: /en/newsletters/2018/11/27/#sighash-updates
