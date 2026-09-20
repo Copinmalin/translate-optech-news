@@ -93,7 +93,7 @@ Bitcoin dépensable.
 
 <div markdown="1" class="callout">
 
-### 2018 summary<br>Principales versions de projets d'infrastructure populaires
+### sommaire 2018<br>Principales versions de projets d'infrastructure populaires
 
 - [Bitcoin Core 0.16][] publié en février incluait un support par défaut dans le portefeuille pour recevoir vers des adresses segwit, le
   support de [BIP159][] pour permettre aux nœuds élagués de signaler leur volonté de servir des blocs récents, et un certain nombre
@@ -413,7 +413,7 @@ an. En conséquence, nous n'avons aucune idée de ce que 2019 réserve exactemen
 découvrir.
 
 *Le bulletin Optech reviendra à son calendrier habituel de publication le mardi, le 8 janvier. Vous pouvez [vous abonner par e-mail][optech
-les bulletins] ou suivre notre [flux RSS][].*
+les bulletins] ou suivre notre [flux RSS][RSS feed].*
 
 ## Footnotes
 
@@ -505,7 +505,7 @@ nécessaires pour que MAST fonctionne. Pour les propositions réelles, veuillez 
 [splicing]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-October/001434.html
 [subzero]: https://medium.com/square-corner-blog/open-sourcing-subzero-ee9e3e071827
 [taproot]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-January/015614.html
-[transaction pinning]: https://bitcoin.stackexchange.com/questions/80803/what-is-meant-by-transaction-pinning/80804#80804
+[épinglage de transaction]: https://bitcoin.stackexchange.com/questions/80803/what-is-meant-by-transaction-pinning/80804#80804
 [untrackable auth]: https://gist.github.com/sipa/d7dcaae0419f10e5be0270fada84c20b
 [mast backronym]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-November/016500.html
 [todd mast]: https://bitcointalk.org/index.php?topic=255145.msg2757327#msg2757327
