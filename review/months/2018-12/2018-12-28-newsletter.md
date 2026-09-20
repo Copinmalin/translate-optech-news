@@ -226,10 +226,10 @@ observateur extérieur de pouvoir supposer automatiquement que toutes les entré
 y a de personnes qui utilisent cette technique, moins l'hypothèse d'association des entrées devient fiable---améliorant la confidentialité
 pour tous les utilisateurs de Bitcoin, pas seulement pour les personnes qui utilisent P2EP.
 
-{% capture today-private %}Entrées:<br>&nbsp;&nbsp;Alice (2 BTC)<br>&nbsp;&nbsp;Alice (2 BTC)<br><br>Sorties:<br>&nbsp;&nbsp;Monnaie d'Alice (1 BTC)<br>&nbsp;&nbsp;Revenu de Bob (3 BTC){% endcapture %}
-{% capture today-public %}Entrées:<br>&nbsp;&nbsp;Dépensier (2 BTC)<br>&nbsp;&nbsp;Dépensier (2 BTC)<br><br>Sorties:<br>&nbsp;&nbsp;Dépensier ou Récepteur (1 BTC)<br>&nbsp;&nbsp;Dépensier ou Récepteur (3 BTC){% endcapture %}
-{% capture p2ep-private %}Entrées:<br>&nbsp;&nbsp;Alice (2 BTC)<br>&nbsp;&nbsp;Alice (2 BTC)<br>&nbsp;&nbsp;Bob (3 BTC)<br><br>Sorties:<br>&nbsp;&nbsp;Monnaie d'Alice (1 BTC)<br>&nbsp;&nbsp;Revenu & monnaie de Bob (6 BTC){% endcapture %}
-{% capture p2ep-public %}Entrées:<br>&nbsp;&nbsp;Dépensier ou Récepteur (2 BTC)<br>&nbsp;&nbsp;Dépensier ou Récepteur (2 BTC)<br>&nbsp;&nbsp;Dépensier ou Récepteur (3 BTC)<br><br>Sorties:<br>&nbsp;&nbsp;Dépensier ou Récepteur (1 BTC)<br>&nbsp;&nbsp;Dépensier ou Récepteur (6 BTC){% endcapture %}
+{% capture today-private %}Entrées:<br> Alice (2 BTC)<br> Alice (2 BTC)<br><br>Sorties:<br> Monnaie d'Alice (1 BTC)<br> Revenu de Bob (3 BTC){% endcapture %}
+{% capture today-public %}Entrées:<br> Dépensier (2 BTC)<br> Dépensier (2 BTC)<br><br>Sorties:<br> Dépensier ou Récepteur (1 BTC)<br>Dépensier ou Récepteur (3 BTC){% endcapture %}
+{% capture p2ep-private %}Entrées:<br> Alice (2 BTC)<br> Alice (2 BTC)<br> Bob (3 BTC)<br><br>Sorties:<br> Monnaie d'Alice (1 BTC)<br> Revenu & monnaie de Bob (6 BTC){% endcapture %}
+{% capture p2ep-public %}Entrées:<br> Dépensier ou Récepteur (2 BTC)<br> Dépensier ou Récepteur (2 BTC)<br> Dépensier ou Récepteur (3 BTC)<br><br>Sorties:<br> Dépensier ou Récepteur (1 BTC)<br>& Dépensier ou Récepteur (6 BTC){% endcapture %}
 
 </div>
 
