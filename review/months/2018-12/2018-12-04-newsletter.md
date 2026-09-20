@@ -13,7 +13,7 @@ une nouvelle version de LND ainsi que les travaux vers une version de maintenanc
 
 ## Action à entreprendre
 
-- Bitcoin Core se prépare pour la prochaine [version de maintenance][] 0.17.1. Les versions de maintenance incluent des corrections de bugs
+- Bitcoin Core se prépare pour la prochaine [version de maintenance][maintenance release] 0.17.1. Les versions de maintenance incluent des corrections de bugs
   et des rétroportages de fonctionnalités mineures. Toute personne prévoyant d'adopter cette version est encouragée à examiner la liste des
   [correctifs rétroportés][0.17.1 milestone] et à aider aux tests lorsqu'une version candidate sera mise à disposition.
 
@@ -118,7 +118,7 @@ repo], et [libsecp256k1][libsecp256k1 repo].*
 {% include linkers/issues.md issues="1937,14477,2081" %}
 
 [maintenance release]: https://bitcoincore.org/en/lifecycle/#maintenance-releases
-[last week's le bulletin]: /en/newsletters/2018/11/27/#simplified-fee-bumping-for-ln
+[bulletin de la semaine dernière]: /en/newsletters/2018/11/27/#simplified-fee-bumping-for-ln
 [carve out thread]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-November/016518.html
 [ln1.1 accepted proposals]: https://github.com/lightningnetwork/lightning-rfc/wiki/Lightning-Specification-1.1-Proposal-States
 [ln spec meetings]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001673.html
