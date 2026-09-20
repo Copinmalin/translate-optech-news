@@ -13,7 +13,7 @@ de projets open source par des centaines de contributeurs. Sans ces contribution
 bulletin ne seraient que des mots vides, et nous adressons donc nos plus sincères remerciements à tous ceux d'entre vous qui ont contribué
 au développement de Bitcoin cette année.
 
-## January
+## Janvier
 
 Des centaines de canaux Lightning Network (LN) étaient ouverts sur testnet avant le début de l'année, mais janvier 2018 a vu quelques
 entreprises et utilisateurs commencer à utiliser les paiements LN avec de vrais bitcoins sur mainnet. Les pionniers ont étiqueté leurs
@@ -49,7 +49,7 @@ OP_CHECKSIG> <hash> <flags>` | | **Utilisateurs coopérants, Taproot[^fn-opcodes
 
 </div>
 
-## February
+## Février
 
 Comme si les avantages potentiels de Taproot ne suffisaient pas, février a vu Gregory Maxwell décrire une construction de celui-ci appelée
 [Graftroot][] qui permettrait aux personnes actuellement autorisées à dépenser une pièce de créer des ensembles supplémentaires de
@@ -84,7 +84,7 @@ Février s'est terminé avec un peu de parallélisme historique. Un des premiers
 acheté une pizza avec Bitcoin, Laszlo Hanyecz, a [acheté][offchain pizza] deux pizzas en utilisant LN pour 6,49 mBTC---un prix bien plus bas
 en termes de BTC que les 10 millions de mBTC qu'il a [payés][onchain pizza] pour deux pizzas en mai 2010.
 
-## March
+## Mars
 
 De nombreux utilisateurs de Bitcoin connaissent la possibilité de créer des messages signés correspondant à leurs adresses Bitcoin. Il
 n'existe actuellement aucune méthode standard pour faire cela avec des adresses P2SH ou segwit. Une discussion en mars finirait par se
@@ -113,7 +113,7 @@ Bitcoin dépensable.
 
 </div>
 
-## April
+## Avril
 
 Les développeurs du protocole LN Christian Decker, Rusty Russell, et Olaoluwa Osuntokun ont annoncé [Eltoo][], un mécanisme d'application
 alternatif proposé pour LN. Le mécanisme actuel ([LN-penalty][]) exige de rendre les mises à jour précédentes de solde hors chaîne
@@ -137,11 +137,11 @@ relais des nœuds permettent l'[épinglage de transaction][]. Malgré cela, les 
 proposition et beaucoup espèrent que la fonctionnalité noinput pourra faire partie d'une éventuelle future proposition de soft fork Schnorr
 et Taproot.
 
-## May
+## Mai
 
 <div id="dandelion" markdown="1">
 
-Un [BIP brouillon][BIP156] pour le protocole Dandelion a été publié sur la liste de diffusion Bitcoin-Dev en mai. Dandelion peut relayer des
+Un [brouillon de BIP][BIP156] pour le protocole Dandelion a été publié sur la liste de diffusion Bitcoin-Dev en mai. Dandelion peut relayer des
 transactions de manière privée de sorte que l'adresse IP du dépensier ne puisse pas être déterminée de manière fiable. Cela fonctionne même
 sans utiliser une méthode comme Tor, et Dandelion peut être combiné avec Tor pour diminuer davantage le risque d'un compromis de
 confidentialité. Dandelion à lui seul ne bénéficie pleinement qu'aux utilisateurs de nœuds complets qui relaient (et non aux clients légers
@@ -156,7 +156,7 @@ nœud---des problèmes que les développeurs sont toujours en train de [travaill
 
 <div markdown="1" class="callout">
 
-### 2018 summary<br>Conférences techniques notables et autres événements
+### Sommaire 2018<br>Conférences techniques notables et autres événements
 
 - [BPASE][bpase], janvier, Stanford University
 - [Bitcoin Core developers meetup NYC][coredevtech nyc], mars, New York City ([transcripts][coredevtech ts])
@@ -170,14 +170,14 @@ nœud---des problèmes que les développeurs sont toujours en train de [travaill
 
 </div>
 
-## June
+## Juin
 
 En juin, Matt Corallo a annoncé publiquement un projet sur lequel il travaillait depuis un certain temps : un nouveau protocole de
 communication entre un serveur de pool de minage et les mineurs individuels, puis jusqu'aux ASICs effectuant réellement le travail. Nommé
 [BetterHash][], le protocole sépare les paiements du pool de la sélection des transactions. Une illustration de l'importance de cela est
 apparue plus tard dans l'année lorsque plusieurs pools de minage traditionnels ont [menacé][bitcoin.com forced bch mining] de rediriger leur
 puissance de hachage Bitcoin pour travailler sur une altcoin---ce à quoi les mineurs utilisant BetterHash auraient pu résister
-automatiquement. Corallo a fourni BetterHash avec à la fois un [BIP brouillon][betterhash] et une [implémentation fonctionnelle][betterhash
+automatiquement. Corallo a fourni BetterHash avec à la fois un [brouillon de BIP][betterhash] et une [implémentation fonctionnelle][betterhash
 implementation] qui inclut une compatibilité rétroactive avec le protocole de communication de minage prédominant Stratum.
 
 {:#cve-2017-12842} Au même moment, une [vulnérabilité][sdl fake spv proof] connue depuis longtemps de certains développeurs du protocole
@@ -194,7 +194,7 @@ Du côté amusant, le site web [satoshis.place][] de Lightning K0ala a connu une
 dépenser de vrais bitcoins avec LN. Des centaines d'utilisateurs ont payé un satoshi par pixel pour peindre tout ce qu'ils voulaient sur la
 toile partagée, offrant une démonstration en direct étonnamment efficace de la rapidité et de la commodité des paiements LN.
 
-## July
+## Juillet
 
 Après plus d'un an de [préavis][alert retirement alert], juillet a commencé par la [publication][alert key release] de la clé privée
 précédemment utilisée pour signer les messages d'alerte diffusés à travers le réseau P2P de Bitcoin. Les messages d'alerte ne se
@@ -203,7 +203,7 @@ disposant de la clé d'alerte la capacité de stopper effectivement tout commerc
 préoccupante pour un réseau décentralisé. Les détails de multiples vulnérabilités de déni de service contre d'anciens nœuds qui pouvaient
 être exécutées avec la clé d'alerte ont été publiés en même temps que la clé.
 
-Dans les nouvelles positives, Pieter Wuille a publié un [BIP brouillon][schnorr bip] définissant un schéma de signature basé sur Schnorr
+Dans les nouvelles positives, Pieter Wuille a publié un [brouillon de BIP][schnorr bip] définissant un schéma de signature basé sur Schnorr
 avec pour objectif de permettre à chacun de discuter---et, espérons-le, de se mettre d'accord---sur la manière dont cet aspect de l'ajout de
 Schnorr à Bitcoin fonctionnerait pendant que d'autres détails d'un possible soft fork sont encore en cours d'élaboration. Le format proposé
 serait entièrement compatible avec les clés privées et publiques bitcoin existantes, de sorte que les portefeuilles HD ne devraient pas
@@ -240,14 +240,14 @@ P2EP** | {{p2ep-private}} | {{p2ep-public}} |
 
 </div>
 
-## August
+## Août
 
 Un effort de long terme visant à apporter le chiffrement au protocole réseau de Bitcoin a connu de nouveaux développements en août avec
 l'ouverture d'une [PR][bitcoin core #14032] vers Bitcoin Core et la publication d'un [BIP151 révisé][BIP151]. Le chiffrement des
 communications est déjà possible (et recommandé) via Tor---qui peut fournir d'autres avantages---mais activer le chiffrement par défaut
 pourrait aider à protéger un plus grand nombre d'utilisateurs contre l'écoute de leurs FAI.
 
-{:#countersign} Séparément, Pieter Wuille travaille sur un [document brouillon][untrackable auth] depuis février, basé sur un protocole
+{:#countersign} Séparément, Pieter Wuille travaille sur un [document en brouillon][untrackable auth] depuis février, basé sur un protocole
 qu'il, Gregory Maxwell, et d'autres développent afin de permettre une authentification optionnelle au-dessus du chiffrement. Similaire à
 [BIP150][], cela faciliterait l'établissement sécurisé de nœuds sur liste blanche à travers Internet ou de portefeuilles légers liés à des
 nœuds de confiance. Il est notable que l'idée actuelle pour cela est de permettre l'authentification sans révéler l'identité à des tiers
@@ -257,7 +257,7 @@ fur et à mesure de l'avancement des recherches sur le développement du protoco
 
 <div markdown="1" class="callout">
 
-### 2018 summary<br>Bitcoin Optech
+### sommaire 2018<br>Bitcoin Optech
 
 Après avoir lancé [Optech][] en mai, nous avons inscrit 15 entreprises comme membres, organisé deux [ateliers][optech workshops], produit 28
 bulletins hebdomadaires, construit un tableau de bord, et pris un bon départ sur un livre consacré aux techniques de passage à l'échelle
@@ -266,7 +266,7 @@ consulter notre court [rapport annuel][optech annual report].
 
 </div>
 
-## September
+## Septembre
 
 La grande nouvelle de septembre a été la découverte, la [divulgation][core dup post], la correction, et l'analyse de la vulnérabilité
 [CVE-2018-17144][] des entrées dupliquées dans les versions non corrigées de Bitcoin Core 0.14.0 à 0.16.2. La vulnérabilité permettait à un
@@ -279,7 +279,7 @@ De tels problèmes ne peuvent finalement être évités qu'en augmentant la quan
 changements de code---et pour cela, Bitcoin a besoin de plus de relecteurs, de plus d'auteurs de tests, et de plus d'organisations engagées
 à embaucher ou parrainer de tels contributeurs.
 
-## October
+## Octobre
 
 La cinquième [Scaling Bitcoin conference][] au début d'octobre a à la fois introduit de nouvelles idées pour l'avenir de Bitcoin et affiné
 des idées existantes. Lors d'événements associés, des [présentations immédiatement pratiques][edge dev++] se sont concentrées sur la
@@ -295,7 +295,7 @@ onchain en utilisant un splice out (retrait) depuis ce canal de paiement.
 
 <div markdown="1" class="callout">
 
-### 2018 summary<br>Nouvelles solutions d'infrastructure open source
+### sommaire 2018<br>Nouvelles solutions d'infrastructure open source
 
 - [Electrs][] publié en juillet fournit une réimplémentation efficace d'un serveur de recherche de transactions de type Electrum écrit dans
   le langage de programmation Rust. Les besoins en ressources sont significativement plus faibles que pour les alternatives. Les serveurs de
@@ -310,7 +310,7 @@ onchain en utilisant un splice out (retrait) depuis ce canal de paiement.
 
 </div>
 
-## November
+## Novembre
 
 Les développeurs du protocole LN se sont réunis en novembre pour décider quels changements adopter pour la future spécification du protocole
 Lightning Network 1.1. Les [changements acceptés][ln1.1 changes] sont fortement axés sur des améliorations d'utilisabilité. Deux
@@ -331,7 +331,7 @@ difficile par une partie du code de Bitcoin Core destiné à prévenir les attaq
 l'augmentation des frais peu fiable dans des cas adversariaux, mais le développeur de protocole Matt Corallo a [proposé][cpfp carve out] une
 nouvelle règle qui pourrait permettre en toute sécurité l'augmentation des frais dans le cas de paiements LN à deux parties.
 
-## December
+## Décembre
 
 {:#libminisketch} Pieter Wuille, Gregory Maxwell, et Gleb Naumenko ont étudié comment réduire la quantité de données utilisée pour relayer
 les transactions Bitcoin. Leur résultat initial est [libminisketch][], une bibliothèque qui permet à un utilisateur disposant d'un ensemble
@@ -349,7 +349,7 @@ publiée aujourd'hui.
 
 <div markdown="1" class="callout">
 
-### 2018 summary<br>Utilisation des techniques de réduction des frais
+### sommaire 2018<br>Utilisation des techniques de réduction des frais
 
 ![Graphique de l'utilisation des clés publiques compressées, segwit, du regroupement de paiements et du RBF opt-in en
 2018](/img/posts/2018-12-overall.png)
@@ -514,7 +514,7 @@ nécessaires pour que MAST fonctionne. Pour les propositions réelles, veuillez 
 [wuille minisketch savings]: https://twitter.com/pwuille/status/1075460072786935808
 [decker unsafe]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-July/016193.html
 [bitcoin core 0.6]: https://bitcoin.org/en/release/v0.6.0
-[techniques for reducing transaction fees]: https://en.bitcoin.it/wiki/Techniques_to_reduce_transaction_fees
+[techniques de réduction des frais de transaction]: https://en.bitcoin.it/wiki/Techniques_to_reduce_transaction_fees
 [payment batching]: https://bitcointechtalk.com/saving-up-to-80-on-bitcoin-transaction-fees-by-batching-payments-4147ab7009fb
 [towns consolidation]: /en/xapo-utxo-consolidation/
 [cve-2017-12842]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-12842
