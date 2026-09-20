@@ -44,8 +44,7 @@ accrue.
 <div markdown="1" class="xoverflow shrink80">
 
 | | Script de réception | Données de dépense | |-|-|-| | **Utilisateur unique, Script actuel (P2PK)** | `<pubkey> OP_CHECKSIG` |
-`<signature>` | | **Utilisateurs coopérants, propositions MAST antérieures[^fn-harding-mast]** | `<hash> OP_MAST` | `<signature> <<pubkey>
-OP_CHECKSIG> <hash> <flags>` | | **Utilisateurs coopérants, Taproot[^fn-opcodes]** | `<pubkey> OP_CHECKSIG` | `<signature>` |
+`<signature>` | | **Utilisateurs coopérants, propositions MAST antérieures[^fn-harding-mast]** | `<hash> OP_MAST` | `<signature> <<pubkey> OP_CHECKSIG> <hash> <flags>` | | **Utilisateurs coopérants, Taproot[^fn-opcodes]** | `<pubkey> OP_CHECKSIG` | `<signature>` |
 
 </div>
 
