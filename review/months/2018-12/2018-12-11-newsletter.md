@@ -14,13 +14,13 @@ projets d'infrastructure populaires sont également décrits.
 
 ## Actions requises
 
-- **Aidez à tester Bitcoin Core 0.17.1RC1&nbsp;:** la première version candidate de cette [version de maintenance][maintenance release] a été [mise en
+- **Aidez à tester Bitcoin Core 0.17.1RC1 :** la première version candidate de cette [version de maintenance][maintenance release] a été [mise en
   ligne][V0.17.1rc1]. Les tests par les entreprises et les utilisateurs individuels, à la fois du daemon et de l'interface graphique, sont
   grandement appréciés et aident à garantir une version de la plus haute qualité.
 
 ## Nouvelles
 
-- **Explorateur de blocs moderne publié en open source&nbsp;:** après avoir récemment [annoncé][explorer announce] un nouveau site web
+- **Explorateur de blocs moderne publié en open source :** après avoir récemment [annoncé][explorer announce] un nouveau site web
   d'explorateur de blocs, Blockstream a annoncé la [publication open source][explorer code announce] de son code backend et frontend. Le
   code prend en charge le réseau principal de Bitcoin, le réseau de test de Bitcoin et la sidechain Liquid.
 
@@ -37,7 +37,7 @@ projets d'infrastructure populaires sont également décrits.
   BitPay Insight. Il inclut également des fonctionnalités modernes (comme la prise en charge des adresses bech32) et un très beau thème par
   défaut.
 
-- **Options de sighash pour couvrir le poids des transactions&nbsp;:** dans le cadre de la discussion sur les hachages de signature décrite
+- **Options de sighash pour couvrir le poids des transactions :** dans le cadre de la discussion sur les hachages de signature décrite
   dans la section *Nouvelles* du [bulletin #23][], Russell O'Connor a [proposé][weight sighash] qu'il devrait exister une capacité
   optionnelle permettant aux signatures de transaction de s'engager sur le poids (la taille) de la transaction. Cela atténue un problème
   perçu avec certains scripts avancés où il pourrait être possible pour une contrepartie ou un tiers d'ajouter des données supplémentaires à
