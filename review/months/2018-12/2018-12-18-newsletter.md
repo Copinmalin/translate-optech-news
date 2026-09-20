@@ -13,13 +13,13 @@ renvoie vers un e-mail au sujet des plans Schnorr/Taproot, et mentionne une proc
 
 ## Actions à entreprendre
 
-- **Aidez à tester Bitcoin Core 0.17.1RC1&nbsp;:** la première version candidate de cette [version de maintenance][] a été
+- **Aidez à tester Bitcoin Core 0.17.1RC1 :** la première version candidate de cette [version de maintenance][maintenance release] a été
   [téléversée][V0.17.1rc1]. Les tests par les entreprises et les utilisateurs individuels, à la fois du daemon et de l'interface graphique,
   sont grandement appréciés et contribuent à garantir une version de la plus haute qualité.
 
 ## Nouvelles
 
-- **Bibliothèque Minisketch publiée&nbsp;:** les développeurs Bitcoin Pieter Wuille, Gregory Maxwell et Gleb Naumenko ont mené des
+- **Bibliothèque Minisketch publiée :** les développeurs Bitcoin Pieter Wuille, Gregory Maxwell et Gleb Naumenko ont mené des
   recherches sur le [relais optimisé des transactions][] tel que décrit dans la section Nouvelles du [Bulletin #9][]. L'un des résultats de
   cette recherche est une nouvelle bibliothèque autonome qu'ils ont publiée, [libminisketch][], qui permet de transférer les différences
   entre deux ensembles d'informations avec une taille approximativement égale, en octets, à celle des différences attendues elles-mêmes.
@@ -34,19 +34,19 @@ renvoie vers un e-mail au sujet des plans Schnorr/Taproot, et mentionne une proc
 
   Ces sketches peuvent fournir une nouvelle manière puissante d'optimiser le relais des transactions non confirmées pour le réseau P2P de
   Bitcoin. Le mécanisme actuel basé sur le gossip fait que chaque nœud reçoit ou envoie des identifiants de 32 octets pour chaque
-  transaction à chacun de ses pairs. Par exemple, si vous avez 100 pairs, vous envoyez ou recevez 3&nbsp;200 octets d'annonces, plus les
+  transaction à chacun de ses pairs. Par exemple, si vous avez 100 pairs, vous envoyez ou recevez 3200 octets d'annonces, plus les
   surcharges, pour ce qui n'est (en moyenne) qu'une transaction de 400 octets. Une première estimation utilisant un [simulateur][naumenko
   relay simulator] indique que la combinaison de sketches avec des identifiants de transaction raccourcis (pour le relais seulement)
   pourrait réduire la bande passante totale de propagation des transactions par un facteur de 44x. Les sketches ont également le potentiel
   de fournir d'autres fonctionnalités souhaitables---par exemple, le développeur du protocole LN Rusty Russell a lancé un [fil][ln
   minisketch] sur la liste de diffusion Lightning-Dev à propos de leur utilisation pour l'envoi des mises à jour de table de routage LN.
 
-- **Description de ce qui pourrait être inclus dans un soft fork Schnorr/Taproot&nbsp;:** le développeur du protocole Bitcoin Anthony Towns
+- **Description de ce qui pourrait être inclus dans un soft fork Schnorr/Taproot :** le développeur du protocole Bitcoin Anthony Towns
   a [publié][towns schnorr taproot] un e-mail bien rédigé décrivant ce qui, selon lui, devrait être inclus dans un soft fork qui ajoute le
   schéma de signature Schnorr ainsi qu'un MAST de style Taproot à Bitcoin. Il ne s'agit pas d'une proposition formelle, mais c'est similaire
   aux opinions que nous avons entendues d'autres développeurs et cela devrait donc fournir un bon aperçu de la réflexion actuelle.
 
-- **Réunion IRC du protocole LN&nbsp;:** les développeurs du protocole LN ont convenu d'essayer de convertir leur réunion périodique de
+- **Réunion IRC du protocole LN :** les développeurs du protocole LN ont convenu d'essayer de convertir leur réunion périodique de
   développement de la spécification LN, d'un Google Hangout en une réunion IRC, après avoir reçu des demandes de plusieurs développeurs. La
   [prochaine réunion][ln irc meeting] aura lieu le mardi 8 janvier, à 19:00 (UTC).
 
@@ -60,7 +60,7 @@ et [libsecp256k1][libsecp256k1 repo].*
   trouver et à utiliser.
 
 - [LND #1984][] ajoute un nouveau RPC `listunspent` qui liste chacune des sorties non dépensées du portefeuille. Il peut prendre deux
-  paramètres&nbsp;: (1) le nombre minimum de confirmations que la sortie non dépensée doit avoir ou (2) le nombre maximum qu'elle peut
+  paramètres : (1) le nombre minimum de confirmations que la sortie non dépensée doit avoir ou (2) le nombre maximum qu'elle peut
   avoir. Le minimum peut être défini à `0` pour afficher les sorties non confirmées.
 
 - [LND #2039][] ajoute la capacité d'obtenir l'état de la fonctionnalité autopilot ainsi que de permettre son activation ou sa désactivation
@@ -78,7 +78,7 @@ et [libsecp256k1][libsecp256k1 repo].*
   fournissent des [décorateurs de fonction][] similaires à ceux utilisés par la bibliothèque populaire [flask][], qui peuvent être utilisés
   pour marquer des fonctions comme fournissant des interfaces de plugin particulières, et ces informations sont automatiquement utilisées
   pour générer un manifeste de plugin. L'exemple de plugin `helloworld.py` a été mis à jour pour utiliser cette bibliothèque, réduisant sa
-  taille de 75&nbsp;% (de 111 lignes à 28).
+  taille de 75 % (de 111 lignes à 28).
 
 ## Calendrier de publication des fêtes
 
@@ -94,10 +94,10 @@ spécial de rétrospective annuelle le vendredi 28 décembre, et nous reprendron
 [boneh-et-al por]: http://www.jbonneau.com/doc/DBBCB15-CCS-provisions.pdf
 [towns schnorr taproot]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016556.html
 [ln irc meeting]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001737.html
-[function decorators]: https://www.thecodeship.com/patterns/guide-to-python-function-decorators/
+[décorateurs de fonction]: https://www.thecodeship.com/patterns/guide-to-python-function-decorators/
 [flask]: http://flask.pocoo.org/
 [ln minisketch]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001741.html
-[optimized transaction relay]: http://diyhpl.us/wiki/transcripts/bitcoin-core-dev-tech/2018-10-08-efficient-p2p-transaction-relay/
+[relais optimisé des transactions]: http://diyhpl.us/wiki/transcripts/bitcoin-core-dev-tech/2018-10-08-efficient-p2p-transaction-relay/
 [naumenko relay simulator]: https://github.com/naumenkogs/Bitcoin-Simulator
-[le bulletin #9]: /fr/newsletters/2018/08/21/#protocole-de-reconciliation-d-ensembles-efficace-en-bande-passante-pour-les-transactions
-[le bulletin #10]: /fr/newsletters/2018/08/28/#c-lightning-1854
+[bulletin #9]: /fr/newsletters/2018/08/21/#protocole-de-reconciliation-d-ensembles-efficace-en-bande-passante-pour-les-transactions
+[bulletin #10]: /fr/newsletters/2018/08/28/#c-lightning-1854
