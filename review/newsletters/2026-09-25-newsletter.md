@@ -61,8 +61,8 @@ mettons en lumière certaines des questions et réponses les mieux votées post�
 {% comment %}<!-- https://bitcoin.stackexchange.com/search?tab=votes&q=created%3a1m..%20is%3aanswer -->{% endcomment %}
 {% assign bse = "https://bitcoin.stackexchange.com/a/" %}
 
-- [Quel serait un inconvénient si la somme au lieu de SHA256 des montants était utilisée dans le message de signature taproot
-  ?]({{bse}}130977) L'utilisateur 1uba explique que s'engager uniquement sur la somme des montants d'entrée dans un hash de signature
+- [Quel inconvénient si la somme au lieu de SHA256 des montants était utilisée dans le message de signature taproot ?]({{bse}}130977)
+  L'utilisateur 1uba explique que s'engager uniquement sur la somme des montants d'entrée dans un hash de signature
   (sighash) [taproot][topic taproot] empêcherait toujours l'attaque de surpaiement des frais citée par [BIP341][], mais que le logiciel
   préparant une transaction pour un dispositif de signature pourrait alors permuter les montants entre les entrées tant que le total restait
   le même. Cela affecte les signataires hors ligne et les transactions collaboratives, où un signataire doit vérifier le montant de sa
@@ -74,8 +74,8 @@ mettons en lumière certaines des questions et réponses les mieux votées post�
   devrait fonctionner, mais si le nœud ne se réorganise pas de lui-même, il suggère d'essayer `reconsiderblock` sur le premier bloc que le
   nœud BIP110 a rejeté.
 
-- [Un nœud Bitcoin peut-il construire un ensemble UTXO partiel uniquement à partir des blocs les plus récents et l'utiliser pour valider de
-  nouvelles transactions ?]({{bse}}131051) Pieter Wuille explique qu'un tel nœud ne peut pas savoir si une entrée manquante a déjà été
+- [Un nœud Bitcoin peut-il construire un ensemble UTXO partiel uniquement à partir des blocs les plus récents et l'utiliser pour valider de nouvelles transactions ?]({{bse}}131051)
+  Pieter Wuille explique qu'un tel nœud ne peut pas savoir si une entrée manquante a déjà été
   dépensée ou a été créée dans un bloc qu'il a ignoré. Parce qu'il ne peut pas rejeter une transaction comme invalide, ce schéma n'effectue
   aucune validation utile et est équivalent en matière de sécurité au SPV, qui repose entièrement sur la preuve de travail.
 
