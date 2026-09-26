@@ -79,8 +79,8 @@ mettons en lumière certaines des questions et réponses les mieux votées post�
   les nœuds ne distribuaient ensuite que les blocs. Pieter Wuille explique pourquoi ce serait mauvais pour la confidentialité et la santé du
   réseau, ainsi que pourquoi cela n'économiserait même pas tant de bande passante que ça.
 
-- [Pourquoi le fait que des mineurs hachent des nonces arbitraires devrait-il inspirer confiance dans la sécurité des transactions
-  ?]({{bse}}83951) Lorsqu'elle est décrite comme un simple jeu de devinettes, la preuve de travail de Bitcoin ne paraît pas très
+- [Pourquoi le fait que des mineurs hachent des nonces arbitraires devrait-il inspirer confiance dans la sécurité des transactions ?]({{bse}}83951)
+  Lorsqu'elle est décrite comme un simple jeu de devinettes, la preuve de travail de Bitcoin ne paraît pas très
   convaincante, mais cette réponse de Chytrik, l'un des 30 meilleurs experts de Bitcoin Stack Exchange, fournit une analogie simple qui
   capture l'essence de la preuve de travail et comment elle aide à maintenir la sécurité des transactions Bitcoin.
 
