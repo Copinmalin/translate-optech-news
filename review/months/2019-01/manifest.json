@@ -1,0 +1,17 @@
+{
+  "month": "2019-01",
+  "min_date": "2018-06-08",
+  "model": "gpt-5.4",
+  "source_urls": [
+    "https://bitcoinops.org/en/newsletters/2019/01/08/",
+    "https://bitcoinops.org/en/newsletters/2019/01/15/",
+    "https://bitcoinops.org/en/newsletters/2019/01/22/",
+    "https://bitcoinops.org/en/newsletters/2019/01/29/"
+  ],
+  "files": [
+    "2019-01-08-newsletter.md",
+    "2019-01-15-newsletter.md",
+    "2019-01-22-newsletter.md",
+    "2019-01-29-newsletter.md"
+  ]
+}
