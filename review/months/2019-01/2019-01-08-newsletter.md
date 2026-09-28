@@ -94,5 +94,5 @@ repo], et [libsecp256k1][libsecp256k1 repo].*
 [cl plugin event]: https://github.com/ElementsProject/lightning/blob/master/doc/PLUGINS.md#event-notifications
 [cl helloworld.py]: https://github.com/ElementsProject/lightning/blob/master/contrib/plugins/helloworld.py
 [btcpay]: https://github.com/btcpayserver/btcpayserver
-[le bulletin #25]: /en/newsletters/2018/12/11/#sighash-options-for-covering-transaction-weight
-[le bulletin #20]: /en/newsletters/2018/11/06/#temporary-reduction-in-segwit-block-production
+[bulletin #25]: /en/newsletters/2018/12/11/#sighash-options-for-covering-transaction-weight
+[bulletin #20]: /en/newsletters/2018/11/06/#temporary-reduction-in-segwit-block-production
