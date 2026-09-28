@@ -162,4 +162,4 @@ récents.
 [payjoin summary]: /en/newsletters/2018/12/28/#july
 [payjoin post]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-January/016625.html
 [contact core]: https://bitcoincore.org/en/contact/
-[le bulletin #26]: /en/newsletters/2018/12/18/#c-lightning-2155
+[bulletin #26]: /en/newsletters/2018/12/18/#c-lightning-2155
