@@ -106,7 +106,7 @@ Aucun cette semaine.
   l’envoyer à un outil tel que [HWI][] qui se connectera au portefeuille externe pour revue et signature.
 
 - [Bitcoin Core #14021][] modifie la RPC `importmulti` pour stocker toute métadonnée d’origine de clé incluse comme partie d’un [descripteur
-  de script de sortie][descriptor]. Les [informations d’origine de clé][] spécifient quelle graine HD et quel chemin de dérivation ont été
+  de script de sortie][descriptor]. Les [informations d’origine de clé][origin key] spécifient quelle graine HD et quel chemin de dérivation ont été
   utilisés pour générer une clé publique. Lorsque des métadonnées d’origine de clé sont disponibles dans le portefeuille, tous les PSBTs
   générés par le portefeuille incluront ces données afin de permettre aux portefeuilles matériels ou à d’autres programmes de localiser les
   clés privées nécessaires pour signer le PSBT. Voir la note de bas de page[^fn-example] pour un exemple d’informations d’origine de clé
@@ -175,7 +175,7 @@ Aucun cette semaine.
 [nick output tagging]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-February/016667.html
 [channel factories]: https://www.tik.ee.ethz.ch/file/a20a865ce40d40c8f942cf206a7cba96/Scalable_Funding_Of_Blockchain_Micropayment_Networks.pdf
 [electrum personal server]: https://github.com/chris-belcher/electrum-personal-server
-[informations d’origine de clé]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#key-origin-identification
+[origin key]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#key-origin-identification
 [bulletin #5]: /fr/newsletters/2018/07/24/#bitcoin-core-9662
 [hwi]: https://github.com/bitcoin-core/HWI
 [descriptor]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md
