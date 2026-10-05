@@ -159,7 +159,7 @@ récents.
 {% include references.md %}
 {% include linkers/issues.md issues="14955,14353,15193,2314,2405,2350,2460,2370,2283,784" %}
 [top bse]: https://bitcoin.stackexchange.com/users?tab=Reputation&filter=all
-[payjoin summary]: /en/newsletters/2018/12/28/#july
+[payjoin summary]: /fr/newsletters/2018/12/28/#juillet
 [payjoin post]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-January/016625.html
 [contact core]: https://bitcoincore.org/en/contact/
-[bulletin #26]: /en/newsletters/2018/12/18/#c-lightning-2155
+[bulletin #26]: /fr/newsletters/2018/12/18/#c-lightning-2155
