@@ -218,12 +218,12 @@ fournies par les organisateurs ([jour 1][], [jour 2][], [jour 3][]).
 [spork txt]: http://diyhpl.us/wiki/transcripts/stanford-blockchain-conference/2019/spork-probabilistic-bitcoin-soft-forks/
 [spork vid]: https://youtu.be/sQOfnsW6PTY?t=29762
 [sbc]: https://cyber.stanford.edu/sbc19
-[transcripts]: http://diyhpl.us/wiki/transcripts/stanford-blockchain-conference/2019/
-[day 1]: https://www.youtube.com/watch?v=XckwEw8FyEA
-[day 2]: https://www.youtube.com/watch?v=sQOfnsW6PTY
-[day 3]: https://www.youtube.com/watch?v=U5fEvfAFs_o
+[transcriptions]: http://diyhpl.us/wiki/transcripts/stanford-blockchain-conference/2019/
+[jour 1]: https://www.youtube.com/watch?v=XckwEw8FyEA
+[jour 2]: https://www.youtube.com/watch?v=sQOfnsW6PTY
+[jour 3]: https://www.youtube.com/watch?v=U5fEvfAFs_o
 [utreexo]: https://dci.mit.edu/research/2018/11/28/utreexo-a-dynamic-accumulator-for-bitcoin-state-a-description-of-research-by-thaddeus-dryja
 [btcpay utxo]: https://github.com/btcpayserver/btcpayserver-docker/tree/master/contrib/FastSync
-[le bulletin #21]: /fr/newsletters/2018/11/13/#vidéos-de-la-résidence-sur-les-applications-lightning
+[bulletin #21]: /fr/newsletters/2018/11/13/#vidéos-de-la-résidence-sur-les-applications-lightning
 [le bulletin #31]: /fr/newsletters/2019/01/29/#c-lightning-2283
-[output script descriptors]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md
+[descripteurs de script de sortie]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md
