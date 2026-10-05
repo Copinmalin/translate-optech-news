@@ -35,7 +35,7 @@ monnaies. Des descriptions de changements notables dans le code de projets popul
 
 - **LN inter-chaînes comme contrat d'options :** le contributeur LN pseudonyme ZmnSCPxj a lancé un fil sur la liste de diffusion
   Lightning-Dev soulignant que des utilisateurs pourraient abuser des paiements qui traversent les monnaies pour créer des [contrats
-  d'options à court terme][] presque gratuits en retardant le règlement du paiement. Un [fil précédent][cjp risk] de Corné Plooy en mai 2018
+  d'options à court terme][contrat option court terme] presque gratuits en retardant le règlement du paiement. Un [fil précédent][cjp risk] de Corné Plooy en mai 2018
   décrivait la même chose.
 
   Par exemple, Mallory apprend que Bob est prêt à acheminer des paiements de Bitcoin vers Litecoin, elle envoie donc un paiement depuis l'un
@@ -89,7 +89,7 @@ repo], et [libsecp256k1][libsecp256k1 repo].*
 [maintenance]: https://bitcoincore.org/en/lifecycle/#maintenance-releases
 [lau bip68]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016574.html
 [rm codesep]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016581.html
-[short-term options contracts]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001752.html
+[contrat option court terme]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001752.html
 [cjp risk]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-May/001292.html
 [cl plugin event]: https://github.com/ElementsProject/lightning/blob/master/doc/PLUGINS.md#event-notifications
 [cl helloworld.py]: https://github.com/ElementsProject/lightning/blob/master/contrib/plugins/helloworld.py
