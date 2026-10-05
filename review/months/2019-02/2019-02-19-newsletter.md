@@ -175,7 +175,7 @@ Aucun cette semaine.
 [nick output tagging]: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-February/016667.html
 [channel factories]: https://www.tik.ee.ethz.ch/file/a20a865ce40d40c8f942cf206a7cba96/Scalable_Funding_Of_Blockchain_Micropayment_Networks.pdf
 [electrum personal server]: https://github.com/chris-belcher/electrum-personal-server
-[origine de clé]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#key-origin-identification
+[informations d’origine de clé]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#key-origin-identification
 [bulletin #5]: /fr/newsletters/2018/07/24/#bitcoin-core-9662
 [hwi]: https://github.com/bitcoin-core/HWI
 [descriptor]: https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md
