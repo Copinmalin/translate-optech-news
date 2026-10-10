@@ -124,7 +124,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   avait créé la transaction. Bitcoin Core termine maintenant les trois tentatives initiales de diffusion privée via Tor ou I2P même si la
   transaction s'est déjà propagée, tout en permettant aux nouvelles tentatives ultérieures de s'arrêter lorsque c'est approprié.
 
-- [Bitcoin Core #36365][] corrige deux problèmes du [estimateur de frais basé sur le mempool][topic fee estimation] (voir le [Bulletin
+- [Bitcoin Core #36365][] corrige deux problèmes de l'[estimateur de frais basé sur le mempool][topic fee estimation] (voir le [Bulletin
   #420][news420 fee estimation]). Auparavant, l'estimateur combiné renvoyait une erreur si l'estimateur basé sur le mempool n'était pas
   disponible, même si l'estimateur existant basé sur les confirmations disposait d'une estimation valide. Désormais, il se rabat sur cette
   estimation tout en continuant à sélectionner la plus basse des deux lorsque les deux sont disponibles. La PR empêche également
