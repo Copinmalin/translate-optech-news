@@ -12,10 +12,16 @@ preferred_terms:
 # - aux ancres
 
 headings:
+  Action items: "Mesures à prendre"
+  Key action items: "Principales mesures à prendre"
   News: "Nouvelles"
   Changes in client software and services: "Changements dans les services et logiciels clients"
   Updates and release candidates: "Mises à jour et versions candidates"
   Notable code and documentation changes: "Changements notables dans le code et la documentation"
+  Notable code changes: "Changements notables dans le code"
+  Notable commits: "Commits notables"
+  Notable merges: "Fusions notables"
+  Notable Bitcoin Core merges: "Fusions notables dans Bitcoin Core"
   Bitcoin Core PR Review Club: "Bitcoin Core PR Review Club"
   Consensus changes: "Modification du consensus"
   Selected Bitcoin Stack Exchange Questions and Answers: "Questions et réponses sélectionnées de Bitcoin Stack Exchange"
