@@ -1,6 +1,37 @@
 # translate-optech-news
 Automate translation for Bitcoinops newsletter.
 
+## Titres de sections français
+
+Les traductions mensuelles, hebdomadaires et manuelles utilisent les libellés fixes
+de `preferences_fr.yaml`, alignés sur les titres récurrents des bulletins français
+publiés depuis 2022 :
+
+| Titre anglais | Titre français imposé |
+|---|---|
+| Action items | Mesures à prendre |
+| Key action items | Principales mesures à prendre |
+| News | Nouvelles |
+| Notable code and documentation changes | Changements notables dans le code et la documentation |
+| Notable code changes | Changements notables dans le code |
+| Notable commits | Commits notables |
+| Notable merges | Fusions notables |
+| Notable Bitcoin Core merges | Fusions notables dans Bitcoin Core |
+| Changes in client software and services | Changements dans les services et logiciels clients |
+| Updates and release candidates | Mises à jour et versions candidates |
+| Bitcoin Core PR Review Club | Bitcoin Core PR Review Club |
+| Consensus changes | Modification du consensus |
+| Selected Bitcoin Stack Exchange Questions and Answers | Questions et réponses sélectionnées de Bitcoin Stack Exchange |
+
+Ces libellés sont imposés après traduction à partir des titres du texte anglais,
+même si le modèle a proposé un synonyme français. Le niveau Markdown (`##`, `###`,
+etc.) et les ancres explicites des titres source sont conservés. Les titres
+spécifiques sans correspondance restent traduits librement. Si le nombre ou le
+niveau des titres change, la traduction échoue avant l'enregistrement du fichier.
+
+Cette règle s'applique aux prochaines générations. Les traductions déjà publiées
+et les lots déjà préparés en PR ne sont pas modifiés rétroactivement.
+
 ## Traduction hebdomadaire avec relecture
 
 Le workflow `.github/workflows/weekly-latest-newsletter.yml` se lance chaque vendredi a 18:15 UTC, donc apres 18 h en France en heure d'hiver comme en heure d'ete. Il peut aussi etre lance manuellement.

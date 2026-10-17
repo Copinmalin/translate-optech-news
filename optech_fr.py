@@ -157,12 +157,12 @@ Règles impératives :
 - Ne modifie pas les noms de référence en bas du fichier.
 - Conserve les backticks, emphases, listes, titres et ancres.
 - Utilise préférentiellement le terme 'bulletin' plutôt que 'newsletter'.
-- Respecte ces préférences lexicales et de titrage.
+- Respecte ces préférences lexicales et reproduis exactement les titres de sections imposés ci-dessous, sans variante ni synonyme.
 
 Termes préférés :
 {terms_block}
 
-Titres de sections préférés :
+Titres de sections imposés (conserve le niveau Markdown de chaque titre source) :
 {headings_block}
 
 Phrases standard préférées :
@@ -186,10 +186,52 @@ Traduis ce corps Markdown en français en conservant la mise en page d'origine a
     return response.output_text.strip() + "\n"
 
 
-def normalize_headings(text: str, headings: dict) -> str:
-    for en, fr in headings.items():
-        text = re.sub(rf"^##\s+{re.escape(en)}\s*$", f"## {fr}", text, flags=re.MULTILINE)
-    return text
+HEADING_RE = re.compile(
+    r"^(?P<level>#{1,6})[ \t]+(?P<title>.*?)(?P<suffix>[ \t]+\{#[^}]+\})?"
+    r"(?P<closing>[ \t]+#+)?[ \t]*$"
+)
+
+
+def markdown_headings(text: str) -> list[tuple[int, re.Match[str]]]:
+    """Repère les titres ATX hors blocs de code clôturés."""
+    found = []
+    fence = None
+    for index, line in enumerate(text.splitlines()):
+        marker = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if marker:
+            run, tail = marker.groups()
+            if fence is None:
+                fence = run
+            elif run[0] == fence[0] and len(run) >= len(fence) and not tail.strip():
+                fence = None
+            continue
+        if fence is None:
+            match = HEADING_RE.fullmatch(line)
+            if match:
+                found.append((index, match))
+    return found
+
+
+def normalize_headings(text: str, headings: dict, source_text: str | None = None) -> str:
+    """Impose les libellés selon les titres source, même après une traduction libre."""
+    translated = markdown_headings(text)
+    source = markdown_headings(source_text) if source_text is not None else translated
+    if len(source) != len(translated) or any(
+        original.group("level") != target.group("level")
+        for (_, original), (_, target) in zip(source, translated)
+    ):
+        raise ValueError("La traduction a modifié le nombre ou le niveau des titres Markdown.")
+
+    lines = text.splitlines(keepends=True)
+    for (_, original), (index, target) in zip(source, translated):
+        preferred = headings.get(original.group("title"))
+        if preferred is not None:
+            ending = "\n" if lines[index].endswith("\n") else ""
+            lines[index] = (
+                f"{original.group('level')} {preferred}"
+                f"{original.group('suffix') or ''}{original.group('closing') or ''}{ending}"
+            )
+    return "".join(lines)
 REFERENCE_DEF_RE = re.compile(r"^\[[^\]]+\]:\s+\S+")
 
 def apply_preferred_terms(text: str, preferred_terms: dict[str, str]) -> str:
@@ -317,6 +359,7 @@ def process_one(en_url: str, output_dir: Path, model: str, overwrite: bool = Fal
         front_matter_fr = adapt_front_matter_for_fr(front_matter)
         translated_body = translate_body_with_openai(body, source_url, model, preferences)
         translated_body = apply_preferred_replacements(translated_body, preferences)
+        translated_body = normalize_headings(translated_body, preferences.get("headings", {}), body)
 
         final_markdown = render_front_matter(front_matter_fr) + "\n" + translated_body
         output_path = build_output_path(output_dir, en_url)

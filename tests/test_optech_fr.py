@@ -1,6 +1,84 @@
 import unittest
+import tempfile
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
-from optech_fr import normalize_newsletter_reference_labels
+from optech_fr import load_preferences, normalize_headings, normalize_newsletter_reference_labels, process_one
+
+
+class NormalizeHeadingsTests(unittest.TestCase):
+    def setUp(self):
+        self.headings = load_preferences()["headings"]
+
+    def test_enforces_fixed_titles_despite_translated_variants(self):
+        source = "## Action items\n\n## News\n\n## Notable code and documentation changes\n"
+        translated = "## Actions à réaliser\n\n## Actualités\n\n## Modifications importantes\n"
+        expected = (
+            "## Mesures à prendre\n\n## Nouvelles\n\n"
+            "## Changements notables dans le code et la documentation\n"
+        )
+        self.assertEqual(normalize_headings(translated, self.headings, source), expected)
+
+    def test_preserves_historical_heading_levels_anchors_and_closing_hashes(self):
+        source = "### Action items {#actions} ###\n### News\n## Notable code changes\n"
+        translated = "### Actions {#autre} ###\n### Actualités\n## Changements importants\n"
+        expected = (
+            "### Mesures à prendre {#actions} ###\n### Nouvelles\n"
+            "## Changements notables dans le code\n"
+        )
+        self.assertEqual(normalize_headings(translated, self.headings, source), expected)
+
+    def test_preserves_custom_titles_body_links_and_code_blocks(self):
+        source = "## News\n## Special topic\n"
+        untouched = (
+            "Voir [News][news].\n[news]: /en/newsletters/2022/01/01/#news\n\n"
+            "```markdown\n## News\n```\n~~~\n## Action items\n~~~\n"
+        )
+        translated = "## Actualités\n## Sujet spécial\n" + untouched
+        self.assertEqual(
+            normalize_headings(translated, self.headings, source),
+            "## Nouvelles\n## Sujet spécial\n" + untouched,
+        )
+
+    def test_rejects_missing_extra_or_changed_level_headings(self):
+        for translated in ("## Actualités\n", "## Actualités\n## Actions\n## Autre\n",
+                           "## Actualités\n### Actions\n"):
+            with self.subTest(translated=translated), self.assertRaises(ValueError):
+                normalize_headings(translated, self.headings, "## News\n## Action items\n")
+
+    def test_normalizes_english_titles_without_source_and_preserves_blank_lines(self):
+        self.assertEqual(
+            normalize_headings("### Action items\n\n\n## News", self.headings),
+            "### Mesures à prendre\n\n\n## Nouvelles",
+        )
+
+    def test_is_idempotent(self):
+        source = "## Action items\n## News\n"
+        result = normalize_headings("## Actions requises\n## Actualités\n", self.headings, source)
+        self.assertEqual(normalize_headings(result, self.headings, source), result)
+
+    def test_process_one_enforces_titles_before_saving_without_api_calls(self):
+        source = "---\ntitle: 'Bitcoin Optech Newsletter #36'\n---\n## Action items\n## News\n"
+        with tempfile.TemporaryDirectory() as directory, \
+             patch("optech_fr.os.getenv", return_value="offline-test"), \
+             patch("optech_fr.fetch", return_value=SimpleNamespace(text=source)), \
+             patch("optech_fr.translate_body_with_openai", return_value="## Actions\n## Actualités\n"):
+            result = process_one("https://bitcoinops.org/en/newsletters/2019/03/05/", Path(directory), "unused")
+            self.assertEqual(result["status"], "ok", result)
+            content = Path(result["output"]).read_text(encoding="utf-8")
+            self.assertIn("## Mesures à prendre\n## Nouvelles\n", content)
+
+    def test_process_one_does_not_save_a_structurally_invalid_translation(self):
+        source = "---\ntitle: 'Bitcoin Optech Newsletter #36'\n---\n## Action items\n## News\n"
+        with tempfile.TemporaryDirectory() as directory, \
+             patch("optech_fr.os.getenv", return_value="offline-test"), \
+             patch("optech_fr.fetch", return_value=SimpleNamespace(text=source)), \
+             patch("optech_fr.translate_body_with_openai", return_value="## Actualités\n"):
+            result = process_one("https://bitcoinops.org/en/newsletters/2019/03/05/", Path(directory), "unused")
+            self.assertEqual(result["status"], "error")
+            self.assertIn("titres Markdown", result["error"])
+            self.assertEqual(list(Path(directory).rglob("*.md")), [])
 
 
 class NormalizeNewsletterReferenceLabelsTests(unittest.TestCase):
