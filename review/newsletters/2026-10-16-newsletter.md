@@ -49,17 +49,17 @@ populaires d'infrastructure Bitcoin.
   Deux joueurs, Alice et Bob, s'accordent sur un certain ensemble de règles. Chaque joueur effectue ses propres coups. En cas de litige,
   Alice peut faire appliquer les règles onchain. Cependant, Gibson note que Lightning peut faire respecter des règles concernant un état
   publié, mais ne peut pas le faire dans le cas où une contrepartie temporise ou cesse de répondre. Pour résoudre ce problème, Gibson
-  introduit un venue, un comité de membres dont le rôle est d'attester si un message signé (un coup dans une partie d'échecs et sa
-  signature) a été publié avant une certaine échéance ou non. Le venue n'a besoin d'attester que de la ponctualité de la publication, pas du
+  introduit une instance, un comité de membres dont le rôle est d'attester si un message signé (un coup dans une partie d'échecs et sa
+  signature) a été publié avant une certaine échéance ou non. L'instance n'a besoin d'attester que de la ponctualité de la publication, pas du
   contenu du message. En cas de litige, Alice publie une transaction affirmant qu'aucun événement n'a été publié par Bob ; en retour, Bob
   peut publier une seconde transaction contenant une réfutation (son coup et l'attestation du venue) ; enfin, Alice peut publier une
   invalidation, déclarant que la réfutation de Bob ne tient pas parce que l'événement n'est pas conforme aux règles.
 
-  Dans la proposition de Gibson, le venue ne détient jamais les fonds des utilisateurs. De plus, elle évite de s'appuyer sur une signature à
+  Dans la proposition de Gibson, l'instance ne détient jamais les fonds des utilisateurs. De plus, elle évite de s'appuyer sur une signature à
   seuil de style FROST afin de rendre la fraude attribuable uniquement aux membres malveillants. Pour ce faire, l'attestation est effectuée
   au moyen de « signatures d'un bit » par membre vérifiées à l'aide de `OP_CHECKSIGADD`. Les membres sont incités par des frais payés
   atomiquement via des canaux en utilisant des [adaptateurs][topic adaptor signatures]. Cependant, la construction repose sur une hypothèse
-  de majorité honnête. Si plus de la moitié des membres du venue colludent avec l'une des parties impliquées, les fonds peuvent être volés.
+  de majorité honnête. Si plus de la moitié des membres de l'instance colludent avec l'une des parties impliquées, les fonds peuvent être volés.
 
   En dehors des jeux, les applications possibles incluent des contrats de preuve de stockage, où un fournisseur perd une caution s'il ne
   répond pas à un défi, et une résolution de litiges hors chaîne similaire à ce que les vérificateurs à connaissance nulle de style
@@ -88,7 +88,7 @@ BOLTs][bolts repo], [Lightning BLIPs][blips repo], [Bitcoin Inquisition][bitcoin
   transaction signée. La première PR ajoute des vérifications pour ces cas. La seconde fait réessayer à Eclair les transactions d'engagement
   et les [transactions de pénalité][topic ln-penalty] qui ont été rejetées par une transaction conflictuelle non confirmée, car le pair peut
   plus tard remplacer cette transaction via [RBF][topic rbf] en faisant une double dépense de l'une de ses autres entrées. Le correctif de
-  réessai s'applique également lorsque la transaction de financement du canal n'est pas confirmée, y compris les [canaux zero-conf][topic
+  nouvelle tentative s'applique également lorsque la transaction de financement du canal n'est pas confirmée, y compris les [canaux zero-conf][topic
   zero-conf channels]. La troisième corrige une autre lacune de récupération : si un remplacement RBF d'un splice est confirmé après
   qu'Eclair a forcé la fermeture en utilisant un engagement pour une tentative sœur, Eclair reconnaît désormais que la transaction de
   financement a changé et diffuse une transaction d'engagement qui dépense la sortie du splice confirmé. Auparavant, les fonds pouvaient
