@@ -14,7 +14,7 @@ code notables dans des projets populaires d'infrastructure Bitcoin.
 
 {% include references.md %}
 
-## Action items
+## Mesures à prendre
 
 - **Aidez à tester Bitcoin Core 0.18.0 RC2 :** Le deuxième candidat de publication (RC) pour la prochaine version majeure de Bitcoin Core a
   été [publié][0.18.0]. Des tests sont encore nécessaires de la part des organisations et des utilisateurs expérimentés qui prévoient

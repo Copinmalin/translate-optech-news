@@ -11,7 +11,7 @@ Le bulletin de cette semaine renvoie à l'annonce de la mise à niveau de C-Ligh
 de diffusion Bitcoin-Dev, et décrit un soft fork proposé pour éliminer plusieurs anciens problèmes du protocole de consensus de Bitcoin.
 Sont également inclus des résumés de commits notables dans des projets populaires d'infrastructure Bitcoin.
 
-## Action items
+## Mesures à prendre
 
 - **Mettre à niveau vers C-Lightning 0.7 :** la fonctionnalité la plus notable de cette nouvelle version majeure est un système de plugins
   qui permet à votre code de fournir des RPC personnalisées ou de s'exécuter sur des événements internes de `lightningd`. La version met

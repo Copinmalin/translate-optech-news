@@ -13,7 +13,7 @@ diffusion Bitcoin-Dev, décrit les discussions récentes de cette liste et renvo
 dans le livre en cours de rédaction d'Optech sur les techniques de passage à l'échelle. Sont également incluses des descriptions de
 plusieurs commits notables dans des projets populaires d'infrastructure Bitcoin.
 
-## Éléments d'action
+## Mesures à prendre
 
 - **Assurez-vous que vous n'utilisez pas d'anciennes versions de Bitcoin Core :** Suhas Daftuar a divulgué une vulnérabilité affectant
   Bitcoin Core 0.13.0 à 0.13.2. (Note : ces versions avaient dépassé leur [fin de vie][core eol] depuis plusieurs mois.) La vulnérabilité

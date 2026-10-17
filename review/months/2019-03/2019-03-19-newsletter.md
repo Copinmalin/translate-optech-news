@@ -15,7 +15,7 @@ bech32 et la liste habituelle des changements notables dans les projets d'infras
 
 {% include references.md %}
 
-## Action items
+## Mesures à prendre
 
 - **Aidez à tester Bitcoin Core 0.18.0 RC2&nbsp;:** le deuxième Release Candidate (RC) pour la prochaine version majeure de Bitcoin Core a
   été [publié][0.18.0]. Des tests sont encore nécessaires de la part des organisations et des utilisateurs expérimentés qui prévoient
@@ -103,7 +103,7 @@ bech32 et la liste habituelle des changements notables dans les projets d'infras
   divisée en [vidéos][mit vids] individuelles et téléversée sur YouTube. Nous avons entendu dire que beaucoup de ces présentations étaient
   excellentes, alors envisagez de parcourir la liste de lecture pour les sujets qui vous semblent intéressants.
 
-## Prise en charge de l'envoi bech32
+## Prise en charge de l'envoi vers bech32
 
 *Semaine 1 sur 24*
 
