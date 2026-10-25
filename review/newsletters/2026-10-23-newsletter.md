@@ -32,7 +32,7 @@ d'infrastructure Bitcoin.
 
   Dans le cas coopératif, le hub signe simplement un règlement de la sortie payant l'utilisateur. S'il refuse ou ne répond pas,
   l'utilisateur génère une preuve Groth16 que le séquenceur a signé un état enregistrant les jetons retournés. Comme Script ne peut pas
-  vérifier une telle preuve, l'utilisateur affirme à la place onchain qu'un programme de vérification fixe l'accepte, et si le hub conteste
+  vérifier une telle preuve, l'utilisateur affirme à la place sur la chaine qu'un programme de vérification fixe l'accepte, et si le hub conteste
   cela, des transactions [BitVMX][topic acc] présignées réduisent le désaccord à une seule étape d'exécution que Script peut vérifier.
   Chaque partie verrouille une réserve qu'elle perd en cas de perte d'un litige, ce qui dissuade les fausses affirmations et les refus.
   Gibson reconnaît qu'un séquenceur qui omet le retour d'un utilisateur, ou signe un état qu'il n'a jamais atteint valablement, peut
