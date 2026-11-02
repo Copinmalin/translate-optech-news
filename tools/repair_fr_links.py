@@ -138,12 +138,14 @@ def resolve_internal_url(en_relative_url: str) -> tuple[str, dict]:
     }
 
 
-def localize_internal_links(markdown_text: str) -> tuple[str, list[dict]]:
+def localize_internal_links(markdown_text: str, skip_newsletters: bool = False) -> tuple[str, list[dict]]:
     changes: list[dict] = []
     pattern = re.compile(r"/en/[A-Za-z0-9_./\-]+(?:#[A-Za-z0-9_\-]+)?")
 
     def repl(match: re.Match) -> str:
         original = match.group(0)
+        if skip_newsletters and original.startswith("/en/newsletters/"):
+            return original
         replacement, meta = resolve_internal_url(original)
         if replacement != original:
             changes.append({"from": original, "to": replacement, **meta})
@@ -164,10 +166,10 @@ def collect_files(target: str) -> list[Path]:
     return sorted(Path().glob(target))
 
 
-def process_file(path: Path, apply_changes: bool) -> dict:
+def process_file(path: Path, apply_changes: bool, skip_newsletters: bool = False) -> dict:
     original = path.read_text(encoding="utf-8")
     front_matter, body = split_front_matter(original)
-    new_body, changes = localize_internal_links(body)
+    new_body, changes = localize_internal_links(body, skip_newsletters=skip_newsletters)
     updated = front_matter + new_body
     changed = updated != original
 
@@ -219,13 +221,16 @@ def main() -> None:
     parser.add_argument("--mode", choices=["audit", "apply"], default="audit")
     parser.add_argument("--target", default="_posts/fr/newsletters")
     parser.add_argument("--branch", default="fix/fr-links")
+    parser.add_argument("--skip-newsletters", action="store_true",
+                        help="Leave newsletter links to the local rendered-tree resolver.")
     args = parser.parse_args()
 
     files = collect_files(args.target)
     if not files:
         raise SystemExit(f"No markdown files found for target: {args.target}")
 
-    results = [process_file(path, apply_changes=(args.mode == "apply")) for path in files]
+    results = [process_file(path, apply_changes=(args.mode == "apply"),
+                            skip_newsletters=args.skip_newsletters) for path in files]
     write_reports(results)
 
     changed_count = sum(1 for r in results if r["changed"])
