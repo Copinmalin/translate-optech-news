@@ -102,8 +102,8 @@ plusieurs commits notables dans des projets populaires d'infrastructure Bitcoin.
   de supprimer les messages `reject` de [BIP61][] de Bitcoin Core. Lorsque votre nœud reçoit un message (comme une transaction) qui présente
   un problème, votre nœud renverra un message `reject` contenant une description du problème. Les messages BIP61 ne sont pas trustless
   (votre nœud pourrait mentir) et les mêmes informations sur les problèmes peuvent être extraites des journaux du nœud qui rejette, ce qui
-  permet aux développeurs d'enquêter sur les problèmes avec les messages envoyés à leurs propres nœuds. Voir le [Bulletin #13][] pour notre
-  description de la PR de Falke qui a désactivé les messages `reject` par défaut dans Bitcoin Core.
+  permet aux développeurs d'enquêter sur les problèmes avec les messages envoyés à leurs propres nœuds. Voir le [Bulletin #13][le bulletin
+  #13] pour notre description de la PR de Falke qui a désactivé les messages `reject` par défaut dans Bitcoin Core.
 
   Andreas Schildbach, auteur de portefeuille et principal mainteneur de la populaire bibliothèque BitcoinJ, a demandé à conserver les
   messages et à les réactiver par défaut. Ses utilisateurs lui envoient par e-mail des fichiers journaux contenant des messages reject
@@ -124,8 +124,8 @@ plusieurs commits notables dans des projets populaires d'infrastructure Bitcoin.
   Chow, s'est montré réceptif à la plupart des suggestions.
 
 - **Publication d'une revue de la littérature sur la confidentialité de Bitcoin :** Chris Belcher a publié un [résumé][privacy summary]
-  étendu de diverses préoccupations en matière de confidentialité présentes dans Bitcoin. Cette page et la [catégorie Privacy][] associée du
-  Wiki constituent un excellent point de départ pour quiconque étudie les questions de confidentialité dans Bitcoin.
+  étendu de diverses préoccupations en matière de confidentialité présentes dans Bitcoin. Cette page et la [catégorie Privacy][privacy
+  category] associée du Wiki constituent un excellent point de départ pour quiconque étudie les questions de confidentialité dans Bitcoin.
 
 - **Proposition de message `addr` version 2 :** Wladimir van der Laan a [proposé][addrv2 proposal] la création d'un BIP pour une nouvelle
   version du message `addr` du protocole P2P. Le message existant communique l'adresse IP ou le nom de service caché Tor (.onion) encodé en

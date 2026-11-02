@@ -27,8 +27,8 @@ code notables dans des projets populaires d'infrastructure Bitcoin.
   mineurs à la création des messages du protocole, comme l'autorisation pour les pairs d'utiliser des identifiants courts économisant de la
   bande passante et l'élimination de la somme de contrôle basée sur SHA256 des messages, puisque le schéma de chiffrement basé sur [AEAD][]
   protège l'intégrité des données. La proposition est destinée à remplacer [BIP151][] et elle contient des liens vers une implémentation
-  d'exemple pour Bitcoin Core ainsi que quelques benchmarks. Voir le [Bulletin #10][] pour la discussion précédente à propos du chiffrement
-  du protocole P2P.
+  d'exemple pour Bitcoin Core ainsi que quelques benchmarks. Voir le [Bulletin #10][le bulletin #10] pour la discussion précédente à propos
+  du chiffrement du protocole P2P.
 
 - **Annonce de Loop :** Lightning Labs a [annoncé][loop announced] un nouvel outil et service pour faciliter les *submarine swaps*, des
   échanges atomiques basés sur HTLC de bitcoins offchain contre des bitcoins onchain. En substance, Alice envoie à Bob un paiement LN
@@ -41,9 +41,9 @@ code notables dans des projets populaires d'infrastructure Bitcoin.
   La majeure partie du processus est sans confiance, de sorte qu'aucune des parties n'a la possibilité de voler l'autre (à condition que le
   logiciel fonctionne correctement et soit utilisé correctement). L'exception concerne la création de la transaction onchain initiale et le
   besoin éventuel pour Bob de créer une transaction de remboursement : si l'échange sans confiance n'a pas lieu, Bob ne recevra aucune
-  compensation pour les frais de transaction onchain nécessaires à ces deux transactions. D'après la [documentation de Loop][], leur
-  implémentation fait envoyer par Alice à Bob un petit paiement de confiance via LN avant l'échange sans confiance comme acte de bonne foi
-  et garantie que l'opération ne finira pas par coûter de l'argent à Bob.
+  compensation pour les frais de transaction onchain nécessaires à ces deux transactions. D'après la [documentation de Loop][loop
+  documentation], leur implémentation fait envoyer par Alice à Bob un petit paiement de confiance via LN avant l'échange sans confiance
+  comme acte de bonne foi et garantie que l'opération ne finira pas par coûter de l'argent à Bob.
 
   En permettant à Alice et Bob d'échanger des fonds onchain et offchain, tout en continuant à utiliser leurs canaux existants, Loop aide les
   utilisateurs à garder leurs canaux ouverts plus longtemps et rend concevable qu'ils puissent rester ouverts indéfiniment.

@@ -48,12 +48,12 @@ bech32 et la liste habituelle des changements notables dans les projets d'infras
   modérément plus grandes lorsque noinput serait utilisé.
 
 - **Mise à jour d'Esplora&nbsp;:** Nadav Ivgi a [annoncé][ivgi twitter] une mise à jour de cet explorateur open source de chaîne de blocs.
-  (Voir notre couverture de sa sortie initiale dans le [Bulletin #25][].) Les transactions non confirmées sont maintenant affichées avec une
-  estimation du temps qu'il leur faudra pour être confirmées compte tenu des conditions actuelles du réseau, ou un avertissement de
-  surpaiement si elles paient plus que nécessaire pour être confirmées rapidement. Plus notable encore, la vue détaillée des transactions
-  confirmées comme non confirmées fournit une analyse des fonctionnalités et anti-fonctionnalités utilisées ou omises dans la transaction.
-  Par exemple&nbsp;: utilisation de segwit, réutilisation d'adresse, précision incohérente des sorties, correspondance avec une [heuristique
-  d'entrée inutile][uih2], types de script d'entrée/sortie incohérents, et transactions sans change.
+  (Voir notre couverture de sa sortie initiale dans le [Bulletin #25][le bulletin #25].) Les transactions non confirmées sont maintenant
+  affichées avec une estimation du temps qu'il leur faudra pour être confirmées compte tenu des conditions actuelles du réseau, ou un
+  avertissement de surpaiement si elles paient plus que nécessaire pour être confirmées rapidement. Plus notable encore, la vue détaillée
+  des transactions confirmées comme non confirmées fournit une analyse des fonctionnalités et anti-fonctionnalités utilisées ou omises dans
+  la transaction. Par exemple&nbsp;: utilisation de segwit, réutilisation d'adresse, précision incohérente des sorties, correspondance avec
+  une [heuristique d'entrée inutile][uih2], types de script d'entrée/sortie incohérents, et transactions sans change.
 
   Après avoir vu les nouveaux changements, Ryan Havar a soulevé des préoccupations [sur Reddit][havar reddit] à propos du taux
   potentiellement élevé de faux positifs dans les avertissements de confidentialité, ce qui l'a conduit à ouvrir un [ticket][havar github]

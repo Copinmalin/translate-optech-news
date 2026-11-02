@@ -59,8 +59,8 @@ Sont également inclus des résumés de commits notables dans des projets popula
     préparation de l'attaque serait publiquement visible pendant au moins une semaine avant d'avoir un quelconque effet, si bien que sa
     correction n'a pas eu une priorité élevée en l'absence d'un cartel de mineurs essayant de la réaliser. Le soft fork proposé corrige le
     problème en exigeant que le premier bloc d'une nouvelle période de difficulté ait un horodatage qui ne soit pas antérieur de plus de 600
-    secondes au dernier bloc de la période précédente. Voir aussi [Bulletin #10][] où nous mentionnons une discussion sur la liste de
-    diffusion à ce sujet.
+    secondes au dernier bloc de la période précédente. Voir aussi le [Bulletin #10][le bulletin #10] où nous mentionnons une discussion sur
+    la liste de diffusion à ce sujet.
 
   - **Interdire l'utilisation d'opcodes non-push dans scriptSig :** depuis le [correctif][1opreturn fix] de juillet 2010 pour une
     vulnérabilité critique de sécurité, chaque `sciptSig` est évalué jusqu'à ne contenir que des éléments de données avant d'être combiné
@@ -196,7 +196,8 @@ Plus d'informations :
 - [Article sur la fiabilité des horodatages Bitcoin][lopp timestamp] par Jameson Lopp
 
 - [Proposition d'utiliser timewarp pour éliminer le besoin de hard forks][Friedenbach proposal] par Mark Friedenbach ; voir aussi notre
-  résumé dans le [Bulletin #16][] - le soft fork de nettoyage proposé élimine la possibilité d'utiliser cette idée controversée
+  résumé dans le [Bulletin #16][le bulletin #16] - le soft fork de nettoyage proposé élimine la possibilité d'utiliser cette idée
+  controversée
 
 ### Attaques sur l'arbre de merkle
 
