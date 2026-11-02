@@ -86,14 +86,36 @@ jobs:
             --output-dir review-output \
             --overwrite
 
+      - name: Set up Ruby for local review links
+        if: steps.existing.outputs.exists == 'false'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+          working-directory: target_repo
+
       - name: Repair internal links
         if: steps.existing.outputs.exists == 'false'
         env:
           PYTHONPATH: .
         run: |
-          python tools/repair_fr_links.py \
-            --mode apply \
-            --target review-output
+          set -euo pipefail
+          python tools/repair_fr_links.py --mode apply --skip-newsletters \
+            --target review-output/_posts/fr/newsletters
+          cp review-output/_posts/fr/newsletters/*.md target_repo/_posts/fr/newsletters/
+          (cd target_repo && bundle exec jekyll build --future --drafts --unpublished)
+          python scripts/localize_newsletter_links.py \
+            --bitcoinops-repo target_repo \
+            --target review-output/_posts/fr/newsletters \
+            --apply --report output/weekly-link-repair.json
+
+      - name: Upload local link repair report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: weekly-review-link-report
+          path: output/*link*.json
+          if-no-files-found: ignore
 
       - name: Read newsletter metadata
         if: steps.existing.outputs.exists == 'false'
@@ -206,6 +228,14 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Set up Python for link repair
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install link repair dependency
+        run: pip install beautifulsoup4
+
       - name: Checkout French fork
         uses: actions/checkout@v6
         with:
@@ -286,8 +316,20 @@ jobs:
           git -C target_repo checkout "$branch"
           git -C target_repo rebase origin/master
 
+          make -C target_repo build
+          python scripts/localize_newsletter_links.py \
+            --bitcoinops-repo target_repo --target "$target" \
+            --apply --report output/weekly-publication-link-repair.json
+          git -C target_repo add "_posts/fr/newsletters/$filename"
+          if ! git -C target_repo diff --cached --quiet; then
+            git -C target_repo commit -m "Localize newsletter links against the current French translations"
+          fi
+
           echo "Exécution du contrôle Bitcoin Optech : make production" | tee -a "$GITHUB_STEP_SUMMARY"
           make -C target_repo production
+          python scripts/localize_newsletter_links.py \
+            --bitcoinops-repo target_repo --target "$target" \
+            --report output/weekly-publication-link-audit.json
           echo "Contrôle Bitcoin Optech réussi avant publication." | tee -a "$GITHUB_STEP_SUMMARY"
 
           git -C target_repo push --set-upstream origin "$branch"
@@ -301,6 +343,14 @@ jobs:
 
           echo "pr_url=$pr_url" >> "$GITHUB_OUTPUT"
           echo "PR amont creee : $pr_url" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload publication link reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: weekly-publication-link-reports
+          path: output/*link*.json
+          if-no-files-found: ignore
 
       - name: Close the review pull request
         env:
