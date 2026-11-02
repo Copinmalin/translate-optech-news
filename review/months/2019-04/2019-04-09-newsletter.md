@@ -47,8 +47,8 @@ fusions notables dans les projets d'infrastructure Bitcoin populaires.
   de 95 % ou plus (et certainement davantage à mesure que la chaîne de blocs continue de croître). La vérification des anciens blocs et
   transactions pourrait ensuite être effectuée en arrière-plan après que l'utilisateur ait déjà commencé à utiliser son nœud, lui donnant
   finalement la même sécurité qu'un utilisateur ayant désactivé cette fonctionnalité. C'est une vieille idée et cela fait partie de la
-  motivation pour la recherche sur d'autres techniques telles que les [engagements UTXO rapidement actualisables][] et les [sauvegardes
-  automatiques de levelDB][].
+  motivation pour la recherche sur d'autres techniques telles que les [engagements UTXO rapidement actualisables][fast updatable UTXO commitments] et les [sauvegardes
+  automatiques de levelDB][automatic leveldb backups].
 
   La discussion a principalement porté sur la question de savoir si c'était ou non une bonne idée. Les arguments en sa faveur incluent le
   fait qu'elle rend le démarrage d'un nouveau nœud bien plus simple et qu'elle ne semble pas modifier le modèle de confiance pour quiconque
@@ -65,7 +65,12 @@ section hebdomadaire qui fournit des informations pour aider les développeurs e
 bech32---la capacité de payer des adresses segwit natives. Cela [ne nécessite pas d'implémenter segwit][bech32 series] vous-même, mais cela
 permet aux personnes que vous payez de bénéficier de tous les multiples avantages de segwit.*
 
-{% include specials/bech32/04-ecc.md %}
+{% capture bech32_section %}{% include specials/bech32/04-ecc.md %}{% endcapture %}
+{{ bech32_section
+  | replace: "/en/newsletters/", "/fr/newsletters/"
+  | replace: "/fr/newsletters/2019/04/02/#bech32-sending-support",
+             "/fr/newsletters/2019/04/02/#prise-en-charge-de-lenvoi-vers-bech32"
+}}
 
 ## Changements notables dans le code et la documentation
 
@@ -102,23 +107,24 @@ versions en attente de publication.*
   ne ressemble pas à une sauvegarde unique de portefeuille HD. C'est une sauvegarde qui doit être effectuée au moins aussi souvent qu'à
   chaque fois que vous ouvrez un nouveau canal---mais c'est bien mieux que l'état actuel où vous pourriez ne pouvoir récupérer aucun fonds
   d'aucun de vos canaux si vous perdez des données. D'autres améliorations de la robustesse des sauvegardes sont mentionnées dans la
-  description de la PR. Voir la description de LND #2370 dans le [Bulletin #31][] pour plus de détails sur le fonctionnement de la
+  description de la PR. Voir la description de LND #2370 dans le [Bulletin #31][le bulletin #31] pour plus de détails sur le fonctionnement de la
   sauvegarde et de la récupération basées sur DLP. L'intégration de cette amélioration majeure des sauvegardes était l'un des principaux
   objectifs de la future version LND 0.6-beta.
 
-- [BIPs #772][] retire [BIP151][] à la demande de son auteur, qui a proposé un schéma alternatif pour le [chiffrement du protocole P2P][].
+- [BIPs #772][] retire [BIP151][] à la demande de son auteur, qui a proposé un schéma alternatif pour le [chiffrement du protocole P2P][p2p protocol encryption].
 
-- [BIPs #756][] assigne [BIP127][] à une spécification pour l'outil de preuve de réserves décrit dans le [Bulletin #33][]. Le texte
+- [BIPs #756][] assigne [BIP127][] à une spécification pour l'outil de preuve de réserves décrit dans le [Bulletin #33][le bulletin #33]. Le texte
   préliminaire du BIP est fusionné.
 
 ## Footnotes
 
-[^full-chain-verification]: Le mécanisme assumed valid est activé par défaut mais peut être désactivé en démarrant Bitcoin Core avec le
-paramètre de configuration `assumevalid=0` (ou `noassumevalid`). Cela permettra à votre nœud de vérifier complètement chaque transaction de
-la chaîne de blocs afin de s'assurer qu'elle suit toutes les règles de consensus. Notez que cela n'aura aucun effet sur les blocs que votre
-nœud a déjà traités, donc si vous voulez vérifier les scripts dans les anciens blocs, vous devrez avoir cette option activée dès la première
-fois que vous utiliserez votre nœud ou vous devrez redémarrer Bitcoin Core une fois avec l'option de configuration `reindex-chainstate`.
-Pour les nœuds élagués, la réindexation nécessite de retélécharger tous les blocs élagués.
+[^full-chain-verification]:
+    Le mécanisme assumed valid est activé par défaut mais peut être désactivé en démarrant Bitcoin Core avec le
+    paramètre de configuration `assumevalid=0` (ou `noassumevalid`). Cela permettra à votre nœud de vérifier complètement chaque transaction de
+    la chaîne de blocs afin de s'assurer qu'elle suit toutes les règles de consensus. Notez que cela n'aura aucun effet sur les blocs que votre
+    nœud a déjà traités, donc si vous voulez vérifier les scripts dans les anciens blocs, vous devrez avoir cette option activée dès la première
+    fois que vous utiliserez votre nœud ou vous devrez redémarrer Bitcoin Core une fois avec l'option de configuration `reindex-chainstate`.
+    Pour les nœuds élagués, la réindexation nécessite de retélécharger tous les blocs élagués.
 
 {% include linkers/issues.md issues="15555,9484,772,756,2313,15596,2885,2740,2370" %}
 [0.18.0]: https://bitcoincore.org/bin/bitcoin-core-0.18.0/

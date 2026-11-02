@@ -59,7 +59,7 @@ leurs versions en attente de publication.*
 
 - [C-Lightning #2540][] ajoute un hook de facture appelé chaque fois qu'un « paiement valide pour une facture impayée est arrivé ». Parmi
   d'autres tâches pouvant être effectuées lorsqu'un paiement est reçu, cela peut être utilisé par un plugin pour implémenter des « hold
-  invoices » comme cela a été précédemment implémenté dans LND (voir notre description de [LND #2022][] dans le [Bulletin #38][]).
+  invoices » comme cela a été précédemment implémenté dans LND (voir notre description de [LND #2022][] dans le [Bulletin #38][le bulletin #38]).
 
 - [C-Lightning #2554][] modifie l'expiration par défaut des factures d'une heure à une semaine. C'est la durée après laquelle le nœud
   rejettera automatiquement les tentatives de paiement de la facture. Les services qui veulent minimiser le risque de taux de change devront
@@ -68,8 +68,8 @@ leurs versions en attente de publication.*
 {% include linkers/issues.md issues="15555,15711,2933,2908,2540,2554,2506,2022" %}
 [0.18.0]: https://bitcoincore.org/bin/bitcoin-core-0.18.0/
 [lnd releases]: https://github.com/lightningnetwork/lnd/releases
-[bech32 easy]: /en/newsletters/2019/03/19/#bech32-sending-support
+[bech32 easy]: /fr/newsletters/2019/03/19/#prise-en-charge-de-lenvoi-vers-bech32
 [lnd issue]: https://github.com/lightningnetwork/lnd/issues/new
 [lnd recover]: https://github.com/lightningnetwork/lnd/blob/master/docs/recovery.md
 [bech32 series]: /en/bech32-sending-support/
-[le bulletin #38]: /en/newsletters/2019/03/19/#lnd-2022
+[le bulletin #38]: /fr/newsletters/2019/03/19/#lnd-2022

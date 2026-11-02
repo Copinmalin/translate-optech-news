@@ -68,7 +68,12 @@ segwit's multiple benefits.*
 {% comment %}<!-- weekly reminder for harding: check Bech32 Adoption
 wiki page for changes -->{% endcomment %}
 
-{% include specials/bech32/06-stackexchange.md %}
+{% capture bech32_section %}{% include specials/bech32/06-stackexchange.md %}{% endcapture %}
+{{ bech32_section
+  | replace: "/en/newsletters/", "/fr/newsletters/"
+  | replace: "/fr/newsletters/2019/03/19/#bech32-sending-support",
+             "/fr/newsletters/2019/03/19/#prise-en-charge-de-lenvoi-vers-bech32"
+}}
 
 ## Changements notables dans le code et la documentation
 
@@ -78,7 +83,7 @@ contraire, toutes les fusions décrites pour Bitcoin Core concernent sa branche 
 être rétroportées vers sa version en attente de publication.*
 
 - [Bitcoin Core #15839][] annule [#14897][Bitcoin Core #14897] dans la branche 0.18 uniquement (pas dans la branche principale de
-  développement). Voir la section *changements notables dans le code et la documentation* du [Bulletin #33][] pour notre description
+  développement). Voir la section *changements notables dans le code et la documentation* du [Bulletin #33][le bulletin #33] pour notre description
   détaillée de #14897, qui a été fusionnée début février. Plusieurs testeurs attentifs des versions candidates (RC) de la 0.18.0 ont
   remarqué que leur nœud cessait parfois de demander de nouvelles transactions peu après son démarrage. Ce problème intermittent semblait
   être lié à l'amélioration de la demande de transactions apportée dans #14897 afin de réduire le risque de déni de service. Au moins deux
@@ -97,7 +102,7 @@ contraire, toutes les fusions décrites pour Bitcoin Core concernent sa branche 
 - [C-Lightning #2541][], [#2545][c-lightning
   #2545], et [#2546][c-lightning #2546] implémentent de multiples changements du
   sous-système de gossip utilisé pour suivre quels canaux sont disponibles et calculer des routes à travers eux. Ce travail a été motivé par
-  le [projet d'un million de canaux][million channels project][] et les résultats de performance de ce projet sont inclus dans de nombreux
+  le [projet d'un million de canaux][million channels project] et les résultats de performance de ce projet sont inclus dans de nombreux
   messages de commit. Si Optech interprète correctement les résultats, la différence entre le [premier commit][417e1ba] de la série et le
   [dernier commit][0fc4241] est une réduction de 79 % de l'utilisation mémoire, passant de 2,6 Gio à 0,6 Gio, et une réduction de 80 % du
   temps nécessaire pour construire une route vers un nœud sélectionné aléatoirement (dans une limite de 20 sauts), passant de 60 secondes à
@@ -111,7 +116,7 @@ contraire, toutes les fusions décrites pour Bitcoin Core concernent sa branche 
   automatiquement d'envoyer un paiement temporairement échoué en utilisant une route différente et génère donc des échecs non finaux et
   d'autres informations qui peuvent ne pas être utiles à un consommateur d'API de haut niveau. Bien qu'il existe des différences
   d'implémentation et de motivation, cela semble conceptuellement lié à [C-Lightning #2382][] comme décrit dans la section *changements
-  notables dans le code et la documentation* du [Bulletin #36][].
+  notables dans le code et la documentation* du [Bulletin #36][le bulletin #36].
 
 - [Eclair #951][] implémente un mécanisme de sauvegarde de canal et fournit une [documentation][eclair backup] pour l'utiliser.
   Contrairement aux sauvegardes statiques de canaux de LND décrites plus haut dans ce bulletin, cela doit être sauvegardé après chaque
@@ -124,17 +129,18 @@ contraire, toutes les fusions décrites pour Bitcoin Core concernent sa branche 
 
 ## Footnotes
 
-[^fn-bip157-bip158]: [BIP158][] introduit les _filtres de blocs compacts_, qui reposent sur une méthode efficace pour encoder une liste
-d'éléments de taille égale. Dans le cas des filtres de bloc « basiques » décrits dans le BIP, il s'agit d'une liste de tous les
-scriptPubKeys de sorties dépensables du bloc courant ainsi que de tous les scriptPubKeys des sorties dépensées par les entrées de ce bloc
-(ce que les développeurs appellent les sorties précédentes (prevouts)). Chacun des scriptPubKeys est haché afin que chaque élément ait la
-même taille, puis ces éléments sont triés dans une liste dont les éléments dupliqués sont retirés. Cette liste est ensuite encodée en
-utilisant l'algorithme [Golomb--Rice Coded Sets][gcs] (GCS) également décrit dans BIP158, réduisant sans perte la taille de la liste. Ce
-filtre basique spécifique fournit suffisamment d'informations pour que quiconque connaît une adresse Bitcoin puisse trouver tout bloc
-contenant une transaction payant cette adresse (scriptPubKey de sortie) ou dépensant des fonds précédemment reçus sur cette adresse
-(scriptPubKey de prevout). La recherche peut produire des correspondances faussement positives (ainsi des blocs ne contenant pas de
-transactions pour cette adresse seront inclus dans les résultats), mais ne produira jamais de faux négatifs (ainsi les blocs qui contiennent
-effectivement des transactions pour cette adresse ne seront jamais omis des résultats).
+[^fn-bip157-bip158]:
+    [BIP158][] introduit les _filtres de blocs compacts_, qui reposent sur une méthode efficace pour encoder une liste
+    d'éléments de taille égale. Dans le cas des filtres de bloc « basiques » décrits dans le BIP, il s'agit d'une liste de tous les
+    scriptPubKeys de sorties dépensables du bloc courant ainsi que de tous les scriptPubKeys des sorties dépensées par les entrées de ce bloc
+    (ce que les développeurs appellent les sorties précédentes (prevouts)). Chacun des scriptPubKeys est haché afin que chaque élément ait la
+    même taille, puis ces éléments sont triés dans une liste dont les éléments dupliqués sont retirés. Cette liste est ensuite encodée en
+    utilisant l'algorithme [Golomb--Rice Coded Sets][gcs] (GCS) également décrit dans BIP158, réduisant sans perte la taille de la liste. Ce
+    filtre basique spécifique fournit suffisamment d'informations pour que quiconque connaît une adresse Bitcoin puisse trouver tout bloc
+    contenant une transaction payant cette adresse (scriptPubKey de sortie) ou dépensant des fonds précédemment reçus sur cette adresse
+    (scriptPubKey de prevout). La recherche peut produire des correspondances faussement positives (ainsi des blocs ne contenant pas de
+    transactions pour cette adresse seront inclus dans les résultats), mais ne produira jamais de faux négatifs (ainsi les blocs qui contiennent
+    effectivement des transactions pour cette adresse ne seront jamais omis des résultats).
 
     Un BIP distinct, [BIP157][], décrit comment ces filtres de blocs compacts peuvent être servis sur le réseau en utilisant le protocole
     Bitcoin P2P. BIP157 est conçu pour fonctionner avec les filtres « basiques » de BIP158 mais il peut aussi être étendu pour supporter des
@@ -178,4 +184,4 @@ effectivement des transactions pour cette adresse ne seront jamais omis des rés
 [rbf usability study]: /en/rbf-in-the-wild/
 [gcs]:  https://en.wikipedia.org/wiki/Golomb_coding#Rice_coding
 [le bulletin #33]: /fr/newsletters/2019/02/12/#bitcoin-core-14897
-[le bulletin #36]: /en/newsletters/2019/03/05/#c-lightning-2382
+[le bulletin #36]: /fr/newsletters/2019/03/05/#c-lightning-2382

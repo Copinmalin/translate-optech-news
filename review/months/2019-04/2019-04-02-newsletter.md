@@ -63,7 +63,12 @@ rubrique hebdomadaire qui fournit des informations pour aider les développeurs 
 l'envoi vers bech32---la capacité de payer des adresses segwit natives. Cela [ne nécessite pas d'implémenter segwit][bech32 series]
 vous-même, mais cela permet aux personnes que vous payez d'accéder à l'ensemble des multiples avantages de segwit.*
 
-{% include specials/bech32/03-python-ref.md %}
+{% capture bech32_section %}{% include specials/bech32/03-python-ref.md %}{% endcapture %}
+{{ bech32_section
+  | replace: "/en/newsletters/", "/fr/newsletters/"
+  | replace: "/fr/newsletters/2019/03/19/#bech32-sending-support",
+             "/fr/newsletters/2019/03/19/#prise-en-charge-de-lenvoi-vers-bech32"
+}}
 
 ## Changements notables dans le code et la documentation
 
@@ -87,7 +92,7 @@ branche 0.18 pour la publication en attente de la version 0.18.0.*
   meilleure documentation basée sur git, ainsi que pour améliorer leur sécurité et leur auditabilité.)
 
 - [Bitcoin Core #15519][] ajoute une implémentation de [Poly1305][] à Bitcoin Core mais ne l'utilise pas. Il est prévu qu'elle soit utilisée
-  plus tard pour une implémentation du [chiffrement du protocole P2P][].
+  plus tard pour une implémentation du [chiffrement du protocole P2P][p2p protocol encryption].
 
 - [Bitcoin Core #15637][] modifie les RPC liés au mempool (tels que `getrawmempool`) pour renommer le champ `size` en `vsize`. La valeur
   précédente était également la vsize, donc le calcul n'a pas changé. Cette PR fusionnée clarifie simplement qu'il s'agit d'une vsize et non
