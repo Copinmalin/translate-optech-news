@@ -61,6 +61,43 @@ Le workflow `.github/workflows/cleanup-merged-newsletter-branches.yml` contrôle
 
 La branche du fork doit encore pointer sur le commit fusionné. Les PR amont ouvertes, fermées sans fusion, dont le fichier n'est pas publié sur `master`, ou les branches modifiées après publication sont conservées. Le lancement manuel est en simulation par défaut (`dry_run: true`). Le lancement planifié quotidien effectue le nettoyage réel.
 
+## Résolution locale des liens vers les bulletins
+
+Les préparations mensuelles et hebdomadaires copient les nouvelles traductions dans
+un clone de Bitcoin Optech, puis construisent le site avec Jekyll. Le résolveur
+`scripts/localize_newsletter_links.py` utilise ce rendu local : les traductions du
+même lot sont disponibles même lorsqu'elles ne sont pas encore sur le site public.
+
+Les liens vers les bulletins anglais sont automatiquement convertis si une cible
+française existe. Les ancres identiques sont conservées ; les ancres traduites sont
+résolues par une surcharge explicite ou par correspondance des structures complètes
+(titres et éléments de liste ancrés, profondeur des listes et alignement des ancres
+communes). Une structure différente ou une ancre absente demande une entrée vérifiée
+dans `data/manual_anchor_overrides_fr.json`. Une surcharge doit elle-même désigner
+une ancre présente dans le rendu français. Les blocs de code, commentaires et
+métadonnées ne sont pas réécrits.
+
+Avant chaque publication, un nouveau rendu du `master` actualisé et de la traduction
+approuvée permet de recalculer ces conversions, enregistrées dans un commit distinct
+si nécessaire. `make production` valide ensuite le résultat et un audit final
+refuse les liens anglais dont une cible française est disponible. Si la traduction
+française n'existe pas, le lien anglais est conservé sans bloquer la publication.
+Les rapports de conversion et les cas ambigus sont conservés en artefacts Actions.
+
+Pour un clone contenant déjà les traductions et leur rendu `_site` :
+
+```bash
+python scripts/localize_newsletter_links.py \
+  --bitcoinops-repo /path/to/bitcoinops.github.io \
+  --target /path/to/batch \
+  --apply --report output/local-link-repair.json
+```
+
+Sans `--apply`, la commande effectue seulement un audit et échoue si une conversion
+est nécessaire ou ambiguë. Avec `--apply`, elle corrige automatiquement les cas
+résolus et échoue si un cas ambigu nécessite une décision humaine. Le lot contrôlé
+n'est pas réécrit partiellement si une ambiguïté est détectée.
+
 ## Rattrapage mensuel chaîné
 
 Le workflow `.github/workflows/monthly-sync-pr.yml` traduit l'historique dans l'ordre, un mois à la fois :
