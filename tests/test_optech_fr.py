@@ -25,7 +25,7 @@ class NormalizeHeadingsTests(unittest.TestCase):
         translated = "### Actions {#autre} ###\n### Actualités\n## Changements importants\n"
         expected = (
             "### Mesures à prendre {#actions} ###\n### Nouvelles\n"
-            "## Changements notables dans le code\n"
+            "## Changements notables dans le code et la documentation\n"
         )
         self.assertEqual(normalize_headings(translated, self.headings, source), expected)
 

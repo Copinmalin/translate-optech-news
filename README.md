@@ -13,10 +13,10 @@ publiés depuis 2022 :
 | Key action items | Principales mesures à prendre |
 | News | Nouvelles |
 | Notable code and documentation changes | Changements notables dans le code et la documentation |
-| Notable code changes | Changements notables dans le code |
-| Notable commits | Commits notables |
-| Notable merges | Fusions notables |
-| Notable Bitcoin Core merges | Fusions notables dans Bitcoin Core |
+| Notable code changes | Changements notables dans le code et la documentation |
+| Notable commits | Changements notables dans le code et la documentation |
+| Notable merges | Changements notables dans le code et la documentation |
+| Notable Bitcoin Core merges | Changements notables dans le code et la documentation |
 | Changes in client software and services | Changements dans les services et logiciels clients |
 | Updates and release candidates | Mises à jour et versions candidates |
 | Bitcoin Core PR Review Club | Bitcoin Core PR Review Club |
