@@ -106,7 +106,7 @@ _Une nouvelle section mensuelle résumant les propositions et discussions sur la
 
 - **Prototype de protection contre la relecture sur adhésion volontaire :** Sjors Provoost a [donné suite][sj delving replay] au fil Delving
   Bitcoin sur la protection contre la relecture sur adhésion volontaire lors d'une scission de chaîne (voir le [Bulletin #420][news420
-  replay]) avec un prototype qui utilise une nouvelle version de witness. Une [annex][topic annex] dont la charge utile commence par l'octet
+  replay]) avec un prototype qui utilise une nouvelle version de witness. Une [annexe][topic annex] dont la charge utile commence par l'octet
   0x01 désigne un bloc par une hauteur sur 4 octets, et chaque signature sur cette entrée engage le hachage du bloc de la chaîne souhaitée.
   Le hachage lui-même n'est pas présent dans la transaction. Il a estimé le coût supplémentaire à 1,75 vbytes. Le bloc désigné doit avoir au
   moins 100 blocs d'ancienneté, soit le même horizon que la maturité des coinbase. Il a dit que si le hashrate était réparti également,
