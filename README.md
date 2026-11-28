@@ -32,6 +32,17 @@ niveau des titres change, la traduction échoue avant l'enregistrement du fichie
 Cette règle s'applique aux prochaines générations. Les traductions déjà publiées
 et les lots déjà préparés en PR ne sont pas modifiés rétroactivement.
 
+## Titres et libellés des liens Markdown
+
+Le texte visible entre crochets des liens `[texte](URL)` et `[texte][référence]`
+est également traduit, notamment les titres de questions Bitcoin Stack Exchange.
+Les cibles, clés de référence, variables Liquid et identifiants techniques sont
+conservés. Par exemple :
+
+```markdown
+[Comment réparer des données d'annulation corrompues (somme de contrôle de rev*.dat incorrecte) sans réindexation complète ?]({{bse}}131107)
+```
+
 ## Traduction hebdomadaire avec relecture
 
 Le workflow `.github/workflows/weekly-latest-newsletter.yml` se lance chaque vendredi a 18:15 UTC, donc apres 18 h en France en heure d'hiver comme en heure d'ete. Il peut aussi etre lance manuellement.
