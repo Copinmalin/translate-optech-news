@@ -80,18 +80,18 @@ mettons en lumière certaines des questions et réponses les mieux votées post�
 {% comment %}<!-- https://bitcoin.stackexchange.com/search?tab=votes&q=created%3a1m..%20is%3aanswer -->{% endcomment %}
 {% assign bse = "https://bitcoin.stackexchange.com/a/" %}
 
-- [Why does a policy that is valid with rust-miniscript throw a compile error on the sipa site?]({{bse}}131089) Pieter Wuille explique que
+- [Pourquoi une politique valide avec rust-miniscript provoque-t-elle une erreur de compilation sur le site de sipa ?]({{bse}}131089) Pieter Wuille explique que
   son site de compilation de politiques [miniscript][topic miniscript] n'accepte des noms symboliques que pour les clés, pas pour les
   préimages de hachage, et n'autorise pas les scripts malléables (voir Le [Bulletin #230][news230 malleable]). Une branche de la politique
   de la personne posant la question pouvait être satisfaite en révélant simplement une préimage après 144 blocs, ce qui est intrinsèquement
   malléable car cela n'implique aucune signature.
 
-- [How can I repair corrupted undo data (rev*.dat checksum mismatch) without a full reindex?]({{bse}}131107) P22 décrit la reconstruction
+- [Comment réparer des données d'annulation corrompues (somme de contrôle de rev*.dat incorrecte) sans réindexation complète ?]({{bse}}131107) P22 décrit la reconstruction
   d'enregistrements d'annulation endommagés sur un nœud avec `-txindex`. Les données d'annulation d'un bloc sont la liste des sorties
   dépensées par ses entrées, donc chaque enregistrement peut être reconstruit octet pour octet et réécrit à sa place. `-reindex-chainstate`
   n'aide pas car Bitcoin Core n'écrit les données d'annulation pour un bloc que s'il n'a pas encore de position d'annulation.
 
-- [Why does no Bitcoin opcode push data about the spending transaction onto the stack?]({{bse}}131130) LearnBitcoin répond qu'un soft fork
+- [Pourquoi aucun opcode Bitcoin ne place-t-il sur la pile des données sur la transaction qui dépense les fonds ?]({{bse}}131130) LearnBitcoin répond qu'un soft fork
   redéfinissant un opcode `OP_NOP` peut seulement rendre les scripts invalides, puisqu'en laissant une valeur sur la pile, cela amènerait
   les anciens et les nouveaux nœuds à ne pas être d'accord sur la validité. C'est pourquoi la proposition [OP_CHECKTEMPLATEVERIFY][topic
   op_checktemplateverify] ne fait que vérifier. [Tapscript][topic tapscript] a ajouté des opcodes `OP_SUCCESSx` qui peuvent aussi écrire sur
