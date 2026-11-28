@@ -153,6 +153,10 @@ Règles impératives :
 - Ne recompose pas librement les paragraphes.
 - Ne modifie pas les clés des liens de référence, par exemple [topic covenants], [news194 silent payments], [Bitcoin Core #24836], etc.
 - Ne modifie pas les URLs.
+- Traduis aussi le texte visible entre crochets des liens Markdown [texte](URL) et [texte][référence], notamment tous les titres de questions Bitcoin Stack Exchange.
+- Dans [texte](URL), seule la partie texte est à traduire : conserve exactement la cible entre parenthèses, y compris les variables Liquid comme {{{{bse}}}} et les identifiants numériques.
+- Conserve les noms propres, identifiants techniques et fragments de code présents dans les libellés, par exemple rust-miniscript, rev*.dat et OP_NOP.
+- Avant de répondre, vérifie qu'aucun titre de question ou libellé rédigé en anglais n'a été oublié dans les liens Markdown.
 - Ne modifie pas les tags Liquid/Jekyll, par exemple {{% include references.md %}}.
 - Ne modifie pas les noms de référence en bas du fichier.
 - Conserve les backticks, emphases, listes, titres et ancres.
